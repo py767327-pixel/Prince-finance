@@ -21,7 +21,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        index.html
+
+      - name: Prepare web files
+        run: |
+          mkdir -p www
+          cp index.html www/index.html
 
       - name: Create Android project
         run: npx cap add android
@@ -37,7 +41,9 @@ jobs:
 
       - name: Build APK
         working-directory: android
-        run: chmod +x gradlew && ./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
