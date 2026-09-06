@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#173b72"><title>Prince Finance</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f6f9;color:#172033}
+header{background:#173b72;color:#fff;padding:16px;position:sticky;top:0;z-index:5}
+main{max-width:760px;margin:auto;padding:12px 12px 90px}.page{display:none}.page.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:#fff;padding:14px;border-radius:14px;margin:10px 0;box-shadow:0 2px 8px #0001}
+.stat{font-size:21px;font-weight:700;margin-top:4px}.small{font-size:12px;color:#667}.muted{color:#667;font-size:13px}
+label{display:block;font-size:13px;font-weight:700;margin-top:10px}
+input,textarea,select{width:100%;padding:11px;margin-top:5px;border:1px solid #d7dbe2;border-radius:9px;background:#fff;font-size:15px}
+textarea{min-height:70px;resize:vertical}button{border:0;border-radius:9px;background:#173b72;color:#fff;font-weight:700;padding:11px 14px;margin-top:10px;cursor:pointer}
+button.secondary{background:#e8edf5;color:#173b72}button.danger{background:#c62828}button.full{width:100%}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid #ddd;z-index:10}
+nav button{flex:1;background:#fff;color:#173b72;border-radius:0;margin:0;padding:9px 3px;font-size:11px}
+.statcard{min-height:82px}.item{border-top:1px solid #eee;padding:10px 0}.proof{max-width:100%;max-height:220px;border-radius:8px;margin-top:8px;display:block}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.actions button{margin-top:8px}
+.badge{display:inline-block;padding:4px 7px;border-radius:20px;background:#edf2fa;font-size:11px}
+.empty{text-align:center;padding:18px;color:#667}.hidden{display:none!important}
+@media(max-width:480px){.grid{grid-template-columns:1fr 1fr}.card{padding:12px}}
+</style>
+</head>
+<body>
+<header><b style="font-size:22px">🏦 Prince Finance</b><div style="font-size:12px">Offline Collection Manager</div></header>
+<main>
+<section id="home" class="page active">
+<h2>Dashboard</h2>
+<div class="grid">
+<div class="card statcard">Total Customers<div id="nc" class="stat">0</div></div>
+<div class="card statcard">Amount Given<div id="tg" class="stat">₹0</div></div>
+<div class="card statcard">Amount Collected<div id="tc" class="stat">₹0</div></div>
+<div class="card statcard">Total Remaining<div id="tr" class="stat">₹0</div></div>
+</div>
+<div class="card">Today's Collection<div id="tt" class="stat">₹0</div></div>
+<div class="card"><b>Storage</b><div class="muted" id="storageStatus">Checking local database…</div></div>
+</section>
+
+<section id="customers" class="page">
+<h2>Add Customer</h2>
+<div class="card">
+<label>Name *</label><input id="name" autocomplete="off">
+<label>Mobile Number</label><input id="mobile" type="tel" autocomplete="off">
+<div class="grid"><div><label>Amount Given *</label><input id="given" type="number" min="0" step="0.01"></div><div><label>Total Amount to Collect *</label><input id="target" type="number" min="0" step="0.01"></div></div>
+<div class="grid"><div><label>Start Date *</label><input id="start" type="date"></div><div><label>Duration (Days)</label><input id="duration" type="number" min="0" step="1"></div></div>
+<label>Expected Daily Payment (Optional)</label><input id="daily" type="number" min="0" step="0.01">
+<label>Notes</label><textarea id="notes"></textarea>
+<button class="full" id="addBtn">Add Customer</button>
+</div>
+<h2>Customers</h2><div id="list"></div>
+</section>
+
+<section id="collect" class="page">
+<h2>Daily Collection</h2>
+<div class="card"><label>Date</label><input id="date" type="date"></div>
+<div id="clist"></div>
+</section>
+
+<section id="history" class="page">
+<h2>Payment History</h2><div id="historyList"></div>
+</section>
+
+<section id="reports" class="page">
+<h2>Backup & Restore</h2>
+<div class="card">
+<p class="muted">Backup includes customers, payment history, notes and payment screenshots. Keep a copy outside the app because clearing app/browser data can erase offline data.</p>
+<button class="full" id="backupBtn">Export Backup (JSON)</button>
+<button class="full secondary" id="restoreBtn">Restore Backup (JSON)</button>
+<input id="restore" type="file" accept=".json,application/json" class="hidden">
+</div>
+<div class="card"><b>About</b><p class="muted">No Firebase, login or internet connection is required for normal use. Data is stored locally in IndexedDB.</p></div>
+</section>
+</main>
+<nav>
+<button data-page="home">🏠<br>Home</button><button data-page="customers">👥<br>Customers</button>
+<button data-page="collect">💰<br>Collection</button><button data-page="history">📋<br>History</button><button data-page="reports">💾<br>Backup</button>
+</nav>
+
+<script>
+(function(){
+'use strict';
+const DB_NAME='PrinceFinanceDB', DB_VERSION=1, CSTORE='customers', PSTORE='payments';
+let db=null, today=localDate(), currentDate=today;
+
+function localDate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day}
+function money(x){return '₹'+(Number(x)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
+function uid(){return crypto&&crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(16).slice(2)}
+function tx(stores,mode='readonly'){return db.transaction(stores,mode)}
+function req(r){return new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function openDB(){
+ return new Promise((resolve,reject)=>{
+  const r=indexedDB.open(DB_NAME,DB_VERSION);
+  r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(CSTORE))d.createObjectStore(CSTORE,{keyPath:'id'});if(!d.objectStoreNames.contains(PSTORE)){const s=d.createObjectStore(PSTORE,{keyPath:'id'});s.createIndex('cid','cid',{unique:false});s.createIndex('date','date',{unique:false})}};
+  r.onsuccess=()=>{db=r.result;resolve(db)};r.onerror=()=>reject(r.error);
+ });
+}
+async function all(store){return req(tx([store]).objectStore(store).getAll())}
+async function put(store,obj){return req(tx([store],'readwrite').objectStore(store).put(obj))}
+async function del(store,id){return req(tx([store],'readwrite').objectStore(store).delete(id))}
+async function get(store,id){return req(tx([store]).objectStore(store).get(id))}
+
+async function paymentsFor(cid){return all(PSTORE).then(a=>a.filter(p=>p.cid===cid))}
+async function stats(cid){const c=await get(CSTORE,cid), ps=await paymentsFor(cid);const total=ps.reduce((s,p)=>s+Number(p.amount||0),0);return {collected:total,remaining:Math.max(0,Number(c.target||0)-total)}}
+async function dashboard(){
+ const cs=await all(CSTORE), ps=await all(PSTORE), given=cs.reduce((s,c)=>s+Number(c.given||0),0), collected=ps.reduce((s,p)=>s+Number(p.amount||0),0), target=cs.reduce((s,c)=>s+Number(c.target||0),0), td=ps.filter(p=>p.date===today).reduce((s,p)=>s+Number(p.amount||0),0);
+ nc.textContent=cs.length;tg.textContent=money(given);tc.textContent=money(collected);tr.textContent=money(Math.max(0,target-collected));tt.textContent=money(td);
+ storageStatus.textContent='IndexedDB active • '+cs.length+' customer(s) • '+ps.length+' payment record(s)';
+}
+function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(page).classList.add('active');if(page==='customers')renderCustomers();if(page==='collect')renderCollect();if(page==='history')renderHistory();if(page==='home')dashboard()}
+async function renderCustomers(){
+ const cs=await all(CSTORE);list.innerHTML='';
+ if(!cs.length){list.innerHTML='<div class="card empty">No customers yet.</div>';return}
+ for(const c of cs){const s=await stats(c.id);const div=document.createElement('div');div.className='card';div.innerHTML='<b>'+esc(c.name)+'</b><div class="small">'+esc(c.mobile||'')+'</div><p>Given: '+money(c.given)+'<br>Target: '+money(c.target)+'<br>Collected: '+money(s.collected)+'<br>Remaining: '+money(s.remaining)+'<br>Duration: '+(c.duration||'Custom')+' days<br>Expected Daily: '+(c.daily?money(c.daily):'Not fixed')+'</p>'+(c.notes?'<div class="muted">Notes: '+esc(c.notes)+'</div>':'')+'<div class="actions"><button data-history="'+c.id+'">History</button><button class="danger" data-delete="'+c.id+'">Delete</button></div>';list.appendChild(div)}
+}
+async function addCustomer(){
+ const n=name.value.trim(),g=Number(given.value),t=Number(target.value),s=start.value;
+ if(!n||!Number.isFinite(g)||!Number.isFinite(t)||!s)return alert('Fill Name, Amount Given, Total Amount to Collect and Start Date.');
+ const c={id:uid(),name:n,mobile:mobile.value.trim(),given:g,target:t,start:s,duration:Number(duration.value)||0,daily:Number(daily.value)||0,notes:notes.value.trim(),createdAt:new Date().toISOString()};
+ await put(CSTORE,c);['name','mobile','given','target','duration','daily','notes'].forEach(id=>document.getElementById(id).value='');start.value=today;await dashboard();await renderCustomers();alert('Customer added successfully.')}
+async function deleteCustomer(id){if(!confirm('Delete this customer and all their payment history?'))return;const ps=await paymentsFor(id);for(const p of ps)await del(PSTORE,p.id);await del(CSTORE,id);await dashboard();await renderCustomers();await renderCollect()}
+async function renderCollect(){
+ currentDate=date.value||today;const cs=await all(CSTORE);clist.innerHTML='';
+ if(!cs.length){clist.innerHTML='<div class="card empty">Add a customer first.</div>';return}
+ for(const c of cs){
+  const ps=await paymentsFor(c.id), old=ps.find(p=>p.date===currentDate), s={collected:ps.reduce((a,p)=>a+Number(p.amount||0),0)};
+  const d=document.createElement('div');d.className='card';d.id='pay-'+c.id;
+  d.innerHTML='<b>'+esc(c.name)+'</b><div class="small">Collected: '+money(s.collected)+' • Remaining: '+money(Math.max(0,c.target-s.collected))+' • Expected: '+(c.daily?money(c.daily):'Custom')+'</div><label>Actual Amount Received</label><input class="amount" type="number" min="0" step="0.01" value="'+(old?esc(old.amount):'')+'"><label>Screenshot / Payment Proof (Optional)</label><input class="image" type="file" accept="image/*"><label>Note</label><input class="note" value="'+(old?esc(old.note||''):'')+'"><div class="actions"><button data-pay="'+c.id+'">'+(old?'Update Payment':'Save Payment')+'</button>'+(old?'<button class="danger" data-remove-pay="'+old.id+'">Delete Payment</button>':'')+'</div>'+(old&&old.image?'<img class="proof" src="'+old.image+'" alt="Payment proof">':'');
+  clist.appendChild(d)
+ }
+}
+function fileDataURL(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)})}
+async function savePayment(cid){
+ const b=document.getElementById('pay-'+cid), amount=Number(b.querySelector('.amount').value)||0;
+ if(amount<=0)return alert('Enter an actual amount received.');
+ const ps=await paymentsFor(cid), old=ps.find(p=>p.date===currentDate), file=b.querySelector('.image').files[0], img=file?await fileDataURL(file):(old?old.image||'':'');
+ const p={id:old?old.id:uid(),cid,date:currentDate,amount,note:b.querySelector('.note').value.trim(),image:img,updatedAt:new Date().toISOString()};
+ await put(PSTORE,p);await dashboard();await renderCollect();alert('Payment saved offline.')}
+async function renderHistory(){
+ const cs=await all(CSTORE), ps=await all(PSTORE);ps.sort((a,b)=>b.date.localeCompare(a.date));
+ historyList.innerHTML=ps.length?'':'<div class="card empty">No payments recorded yet.</div>';
+ for(const p of ps){const c=cs.find(x=>x.id===p.cid),div=document.createElement('div');div.className='card';div.innerHTML='<b>'+esc(c?c.name:'Deleted Customer')+'</b><div class="small">'+esc(p.date)+'</div><p>Received: <b>'+money(p.amount)+'</b><br>'+(p.note?'Note: '+esc(p.note):'')+'</p>'+(p.image?'<img class="proof" src="'+p.image+'" alt="Payment proof">':'')+'<button class="danger" data-remove-pay="'+p.id+'">Delete Payment</button>';historyList.appendChild(div)}
+}
+async function removePayment(id){if(!confirm('Delete this payment record?'))return;await del(PSTORE,id);await dashboard();await renderHistory();await renderCollect()}
+function dataURLToBlob(data){const parts=data.split(','),mime=(parts[0].match(/:(.*?);/)||[])[1]||'application/octet-stream',bin=atob(parts[1]||'');const arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:mime})}
+async function backup(){
+ const cs=await all(CSTORE),ps=await all(PSTORE), payload={format:'Prince Finance Backup',version:1,exportedAt:new Date().toISOString(),customers:cs,payments:ps};
+ const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='Prince-Finance-Backup-'+today+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+}
+async function restoreBackup(file){
+ const text=await file.text(), data=JSON.parse(text);
+ if(!data||!Array.isArray(data.customers)||!Array.isArray(data.payments))throw new Error('Invalid backup format.');
+ if(!confirm('Restore this backup? Existing local data will be replaced.'))return;
+ const tr=tx([CSTORE,PSTORE],'readwrite'),cs=tr.objectStore(CSTORE),ps=tr.objectStore(PSTORE);cs.clear();ps.clear();
+ for(const c of data.customers)cs.put(c);
+ for(const p of data.payments){const copy=Object.assign({},p);if(typeof copy.image==='string'&&copy.image.startsWith('data:'))copy.image=copy.image;ps.put(copy)}
+ await new Promise((res,rej)=>{tr.oncomplete=res;tr.onerror=()=>rej(tr.error)});await dashboard();await renderCustomers();await renderCollect();await renderHistory();alert('Backup restored successfully.')
+}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));
+addBtn.addEventListener('click',addCustomer);date.value=today;date.addEventListener('change',renderCollect);
+list.addEventListener('click',e=>{const h=e.target.closest('[data-history]'),d=e.target.closest('[data-delete]');if(h){show('history');renderHistory()} if(d)deleteCustomer(d.dataset.delete)});
+clist.addEventListener('click',e=>{const p=e.target.closest('[data-pay]'),r=e.target.closest('[data-remove-pay]');if(p)savePayment(p.dataset.pay);if(r)removePayment(r.dataset.removePay)});
+historyList.addEventListener('click',e=>{const r=e.target.closest('[data-remove-pay]');if(r)removePayment(r.dataset.removePay)});
+backupBtn.addEventListener('click',backup);restoreBtn.addEventListener('click',()=>restore.click());restore.addEventListener('change',async e=>{try{if(e.target.files[0])await restoreBackup(e.target.files[0])}catch(err){alert('Could not restore backup: '+err.message)}e.target.value=''});
+openDB().then(async()=>{await dashboard();await renderCustomers();}).catch(err=>{storageStatus.textContent='IndexedDB unavailable: '+err.message;alert('This browser/file environment does not allow IndexedDB. Please open the app in Chrome/Firefox or the installed APK version.')});
+})();
+</script>
+</body></html>
