@@ -1,4 +1,4 @@
-name: name: Build Prince Finance APK
+name: Build Prince Finance APK
 
 on:
   workflow_dispatch:
