@@ -1,6 +1,6 @@
 {
   "appId": "com.princefinance.app",
   "appName": "Prince Finance",
-  "webDir": ".",
+  "webDir": "www",
   "bundledWebRuntime": false
 }
