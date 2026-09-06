@@ -1,90 +1,96 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#173b72">
+
 <title>Prince Finance</title>
 
 <style>
 *{box-sizing:border-box}
+
 body{
  margin:0;
  font-family:Arial,sans-serif;
  background:#f4f6f9;
- color:#172033
+ color:#172033;
+ font-size:14px
 }
+
 header{
  background:#173b72;
  color:white;
- padding:15px;
+ padding:11px 13px;
  position:sticky;
  top:0;
  z-index:5
 }
+
 main{
  max-width:900px;
  margin:auto;
- padding:12px 12px 90px
+ padding:12px 12px 75px
 }
+
 .page{display:none}
 .page.active{display:block}
 
 .card{
  background:white;
- padding:14px;
- border-radius:12px;
- margin:10px 0;
- box-shadow:0 2px 8px #0001
+ padding:13px;
+ border-radius:11px;
+ margin:9px 0;
+ box-shadow:0 2px 7px #0001
 }
 
 .grid{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:10px
+ gap:9px
 }
 
 .stat{
- font-size:21px;
- font-weight:700;
- margin-top:4px
+ font-size:18px;
+ font-weight:bold;
+ margin-top:3px
 }
 
 .small,.muted{
- font-size:12px;
+ font-size:11px;
  color:#667
 }
 
 label{
  display:block;
- font-size:13px;
- font-weight:700;
- margin-top:10px
+ font-size:12px;
+ font-weight:bold;
+ margin-top:9px
 }
 
 input,textarea{
  width:100%;
- padding:11px;
- margin-top:5px;
+ padding:10px;
+ margin-top:4px;
  border:1px solid #d7dbe2;
- border-radius:9px;
+ border-radius:8px;
  background:white;
- font-size:15px
+ font-size:14px
 }
 
 textarea{
- min-height:70px;
- resize:vertical
+ min-height:65px
 }
 
 button{
  border:0;
- border-radius:9px;
+ border-radius:8px;
  background:#173b72;
  color:white;
- font-weight:700;
- padding:10px 13px;
- margin-top:8px
+ font-weight:bold;
+ padding:8px 10px;
+ margin-top:6px;
+ font-size:12px
 }
 
 button.secondary{
@@ -121,29 +127,27 @@ nav button{
  color:#173b72;
  border-radius:0;
  margin:0;
- padding:8px 2px;
- font-size:11px
+ padding:6px 2px;
+ font-size:10px
 }
 
-/* Excel style customer table */
+/* CUSTOMER LIST */
+
 .table{
  width:100%;
- border-collapse:collapse;
- background:white
+ border-collapse:collapse
 }
 
 .table th,
 .table td{
- padding:10px 7px;
+ padding:9px 6px;
  border-bottom:1px solid #eee;
  text-align:left;
- font-size:13px
+ font-size:12px
 }
 
 .table th{
- background:#eef2f8;
- position:sticky;
- top:0
+ background:#eef2f8
 }
 
 .customer-row{
@@ -154,16 +158,14 @@ nav button{
  background:#eef2f8
 }
 
-.search{
- margin-bottom:8px
-}
+/* STATUS */
 
 .badge{
  display:inline-block;
- padding:5px 8px;
+ padding:4px 7px;
  border-radius:20px;
- font-size:11px;
- font-weight:700
+ font-size:10px;
+ font-weight:bold
 }
 
 .paid{
@@ -176,19 +178,114 @@ nav button{
  color:#a21d1d
 }
 
-.actions{
+/* PAYMENT HISTORY */
+
+.txn{
  display:flex;
- gap:7px;
- flex-wrap:wrap
+ align-items:center;
+ gap:9px;
+ padding:10px 0;
+ border-bottom:1px solid #eee
 }
 
-.proof,
-.docimg{
- max-width:100%;
- max-height:220px;
+.txn-icon{
+ width:32px;
+ height:32px;
+ border-radius:50%;
+ background:#e7f5ea;
+ color:#287a3e;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:14px;
+ flex:none
+}
+
+.txn-main{
+ flex:1;
+ min-width:0
+}
+
+.txn-title{
+ font-weight:bold;
+ font-size:12px
+}
+
+.txn-date{
+ font-size:10px;
+ color:#777;
+ margin-top:2px
+}
+
+.txn-amount{
+ font-weight:bold;
+ color:#287a3e;
+ font-size:12px
+}
+
+.txn-note{
+ font-size:10px;
+ color:#667;
+ margin-top:3px
+}
+
+.screenshot-btn{
+ background:#eef2f8;
+ color:#173b72;
+ padding:5px 7px;
+ font-size:10px
+}
+
+/* DAY CALENDAR */
+
+.day-grid{
+ display:grid;
+ grid-template-columns:repeat(5,1fr);
+ gap:6px;
+ margin-top:10px
+}
+
+.day-box{
  border-radius:8px;
- display:block;
- margin-top:8px
+ padding:7px 3px;
+ min-height:68px;
+ border:1px solid #b9dfc2;
+ background:#dff4e5;
+ text-align:center;
+ cursor:pointer
+}
+
+.day-box.pending{
+ background:#fde3e3;
+ border-color:#efb3b3
+}
+
+.day-box.future{
+ background:#f1f3f6;
+ border-color:#ddd;
+ color:#777
+}
+
+.day-no{
+ font-size:9px;
+ font-weight:bold
+}
+
+.day-date{
+ font-size:9px;
+ margin-top:3px
+}
+
+.day-status{
+ font-size:10px;
+ font-weight:bold;
+ margin-top:4px
+}
+
+.day-amount{
+ font-size:11px;
+ font-weight:bold;
+ margin-top:3px
 }
 
 .empty{
@@ -197,38 +294,47 @@ nav button{
  color:#667
 }
 
-.hidden{
- display:none!important
+.actions{
+ display:flex;
+ gap:5px;
+ flex-wrap:wrap
 }
 
-.back{
- background:#e8edf5;
- color:#173b72
+.proof{
+ max-width:100%;
+ max-height:220px;
+ border-radius:8px;
+ display:block;
+ margin-top:7px
 }
 
 .detail-grid{
  display:grid;
  grid-template-columns:1fr 1fr;
- gap:8px
+ gap:7px
 }
 
 .detail-item{
  background:#f7f8fa;
- padding:10px;
- border-radius:8px
+ padding:9px;
+ border-radius:7px
 }
 
-.doc-row,
-.pay-row{
+.doc-row{
  border-top:1px solid #eee;
- padding:10px 0
+ padding:9px 0
 }
 
 @media(max-width:520px){
- .table th,.table td{
-  font-size:12px;
-  padding:9px 5px
+
+ .day-grid{
+  grid-template-columns:repeat(4,1fr)
  }
+
+ .day-box{
+  min-height:64px
+ }
+
 }
 </style>
 </head>
@@ -236,13 +342,14 @@ nav button{
 <body>
 
 <header>
-<b style="font-size:22px">🏦 Prince Finance</b>
-<div style="font-size:12px">Offline Collection Manager</div>
+<b style="font-size:20px">🏦 Prince Finance</b>
+<div style="font-size:11px">Offline Collection Manager</div>
 </header>
 
 <main>
 
-<!-- DASHBOARD -->
+<!-- HOME -->
+
 <section id="home" class="page active">
 
 <h2>Dashboard</h2>
@@ -265,7 +372,7 @@ nav button{
 </div>
 
 <div class="card">
-<div class="small">Total Remaining</div>
+<div class="small">Remaining</div>
 <div id="tr" class="stat">₹0</div>
 </div>
 
@@ -277,7 +384,6 @@ nav button{
 </div>
 
 <div class="card">
-<b>Storage</b>
 <div id="storageStatus" class="muted">
 Starting...
 </div>
@@ -287,6 +393,7 @@ Starting...
 
 
 <!-- CUSTOMERS -->
+
 <section id="customers" class="page">
 
 <h2>Customers</h2>
@@ -295,8 +402,7 @@ Starting...
 
 <input
  id="customerSearch"
- class="search"
- placeholder="🔎 Search customer name or mobile">
+ placeholder="🔎 Search customer">
 
 <div style="overflow:auto">
 
@@ -305,7 +411,7 @@ Starting...
 <thead>
 <tr>
 <th>No.</th>
-<th>Customer Name</th>
+<th>Name</th>
 <th>Mobile</th>
 </tr>
 </thead>
@@ -318,8 +424,6 @@ Starting...
 
 </div>
 
-
-<!-- ADD CUSTOMER -->
 
 <div class="card">
 
@@ -335,12 +439,12 @@ Starting...
 
 <div>
 <label>Amount Given *</label>
-<input id="given" type="number" min="0" step="0.01">
+<input id="given" type="number">
 </div>
 
 <div>
 <label>Total Amount to Collect *</label>
-<input id="target" type="number" min="0" step="0.01">
+<input id="target" type="number">
 </div>
 
 </div>
@@ -354,13 +458,13 @@ Starting...
 
 <div>
 <label>Duration (Days)</label>
-<input id="duration" type="number" min="0">
+<input id="duration" type="number">
 </div>
 
 </div>
 
 <label>Expected Daily Payment</label>
-<input id="daily" type="number" min="0" step="0.01">
+<input id="daily" type="number">
 
 <label>Notes</label>
 <textarea id="notes"></textarea>
@@ -375,6 +479,7 @@ Add Customer
 
 
 <!-- CUSTOMER DETAIL -->
+
 <section id="detail" class="page">
 
 <div id="detailContent"></div>
@@ -383,6 +488,7 @@ Add Customer
 
 
 <!-- COLLECTION -->
+
 <section id="collect" class="page">
 
 <h2>Today's Collection</h2>
@@ -392,9 +498,8 @@ Add Customer
 <label>Date</label>
 <input id="date" type="date">
 
-<div class="muted" style="margin-top:7px">
-✅ PAID = payment saved for this date<br>
-❌ PENDING = payment not received
+<div class="muted">
+Green = Paid &nbsp; | &nbsp; Red = Pending
 </div>
 
 </div>
@@ -405,6 +510,7 @@ Add Customer
 
 
 <!-- HISTORY -->
+
 <section id="history" class="page">
 
 <h2>Payment History</h2>
@@ -415,6 +521,7 @@ Add Customer
 
 
 <!-- BACKUP -->
+
 <section id="reports" class="page">
 
 <h2>Backup & Restore</h2>
@@ -432,12 +539,8 @@ Add Customer
 <input
  id="restore"
  type="file"
- accept=".json,application/json"
- class="hidden">
-
-<p class="muted">
-Backup includes customers, payments and customer documents.
-</p>
+ accept=".json"
+ style="display:none">
 
 </div>
 
@@ -445,8 +548,6 @@ Backup includes customers, payments and customer documents.
 
 </main>
 
-
-<!-- NAVIGATION -->
 
 <nav>
 
@@ -488,22 +589,16 @@ const PSTORE='payments';
 const DSTORE='documents';
 
 let db=null;
-let today=localDate();
 let currentCustomerId=null;
-
-
-/* ELEMENTS */
 
 const $=id=>document.getElementById(id);
 
 const els={
-
  nc:$('nc'),
  tg:$('tg'),
  tc:$('tc'),
  tr:$('tr'),
  tt:$('tt'),
-
  storage:$('storageStatus'),
 
  name:$('name'),
@@ -514,7 +609,6 @@ const els={
  duration:$('duration'),
  daily:$('daily'),
  notes:$('notes'),
-
  addBtn:$('addBtn'),
 
  table:$('customerTable'),
@@ -530,11 +624,8 @@ const els={
  backup:$('backupBtn'),
  restoreBtn:$('restoreBtn'),
  restore:$('restore')
-
 };
 
-
-/* DATE */
 
 function localDate(d=new Date()){
 
@@ -545,7 +636,8 @@ function localDate(d=new Date()){
 }
 
 
-/* MONEY */
+const today=localDate();
+
 
 function money(x){
 
@@ -558,7 +650,24 @@ function money(x){
 }
 
 
-/* ESCAPE */
+function prettyDate(s){
+
+ if(!s)return '-';
+
+ const d=
+  new Date(s+'T00:00:00');
+
+ return d.toLocaleDateString(
+  'en-IN',
+  {
+   day:'2-digit',
+   month:'short',
+   year:'numeric'
+  }
+ );
+
+}
+
 
 function esc(x){
 
@@ -577,8 +686,6 @@ function esc(x){
 }
 
 
-/* ID */
-
 function uid(){
 
  if(
@@ -596,115 +703,109 @@ function uid(){
 }
 
 
-/* DATABASE OPEN */
+/* DATABASE */
 
 function openDB(){
 
- return new Promise((resolve,reject)=>{
+ return new Promise(
+  (resolve,reject)=>{
 
-  const r=
-   indexedDB.open(
-    DB_NAME,
-    DB_VERSION
-   );
-
-
-  r.onupgradeneeded=e=>{
-
-   const d=e.target.result;
-
-
-   if(
-    !d.objectStoreNames.contains(CSTORE)
-   ){
-
-    d.createObjectStore(
-     CSTORE,
-     {keyPath:'id'}
+   const r=
+    indexedDB.open(
+     DB_NAME,
+     DB_VERSION
     );
 
-   }
+
+   r.onupgradeneeded=e=>{
+
+    const d=e.target.result;
 
 
-   if(
-    !d.objectStoreNames.contains(PSTORE)
-   ){
+    if(
+     !d.objectStoreNames.contains(CSTORE)
+    ){
 
-    const s=
      d.createObjectStore(
-      PSTORE,
+      CSTORE,
       {keyPath:'id'}
      );
 
-
-    s.createIndex(
-     'cid',
-     'cid',
-     {unique:false}
-    );
+    }
 
 
-    s.createIndex(
-     'date',
-     'date',
-     {unique:false}
-    );
+    if(
+     !d.objectStoreNames.contains(PSTORE)
+    ){
 
-   }
+     const s=
+      d.createObjectStore(
+       PSTORE,
+       {keyPath:'id'}
+      );
 
-
-   if(
-    !d.objectStoreNames.contains(DSTORE)
-   ){
-
-    const s=
-     d.createObjectStore(
-      DSTORE,
-      {keyPath:'id'}
+     s.createIndex(
+      'cid',
+      'cid',
+      {unique:false}
      );
 
+     s.createIndex(
+      'date',
+      'date',
+      {unique:false}
+     );
 
-    s.createIndex(
-     'cid',
-     'cid',
-     {unique:false}
-    );
-
-   }
-
-  };
+    }
 
 
-  r.onsuccess=()=>{
+    if(
+     !d.objectStoreNames.contains(DSTORE)
+    ){
 
-   db=r.result;
+     const s=
+      d.createObjectStore(
+       DSTORE,
+       {keyPath:'id'}
+      );
 
-   resolve(db);
+     s.createIndex(
+      'cid',
+      'cid',
+      {unique:false}
+     );
 
-  };
+    }
+
+   };
 
 
-  r.onerror=()=>{
+   r.onsuccess=()=>{
 
-   reject(r.error);
+    db=r.result;
+    resolve(db);
 
-  };
+   };
 
- });
+
+   r.onerror=()=>reject(r.error);
+
+  }
+ );
 
 }
 
-
-/* DATABASE HELPERS */
 
 function request(r){
 
  return new Promise(
   (resolve,reject)=>{
 
-   r.onsuccess=()=>resolve(r.result);
+   r.onsuccess=
+    ()=>resolve(r.result);
 
-   r.onerror=()=>reject(r.error);
+   r.onerror=
+    ()=>reject(r.error);
 
   }
  );
@@ -716,7 +817,7 @@ function all(store){
 
  return request(
   db
-  .transaction([store],'readonly')
+  .transaction(store,'readonly')
   .objectStore(store)
   .getAll()
  );
@@ -728,7 +829,7 @@ function get(store,id){
 
  return request(
   db
-  .transaction([store],'readonly')
+  .transaction(store,'readonly')
   .objectStore(store)
   .get(id)
  );
@@ -740,7 +841,7 @@ function put(store,obj){
 
  return request(
   db
-  .transaction([store],'readwrite')
+  .transaction(store,'readwrite')
   .objectStore(store)
   .put(obj)
  );
@@ -752,7 +853,7 @@ function del(store,id){
 
  return request(
   db
-  .transaction([store],'readwrite')
+  .transaction(store,'readwrite')
   .objectStore(store)
   .delete(id)
  );
@@ -762,10 +863,10 @@ function del(store,id){
 
 async function paymentsFor(cid){
 
- return (
-  await all(PSTORE)
- ).filter(
-  p=>p.cid===cid
+ const p=await all(PSTORE);
+
+ return p.filter(
+  x=>x.cid===cid
  );
 
 }
@@ -773,43 +874,11 @@ async function paymentsFor(cid){
 
 async function documentsFor(cid){
 
- return (
-  await all(DSTORE)
- ).filter(
-  d=>d.cid===cid
+ const d=await all(DSTORE);
+
+ return d.filter(
+  x=>x.cid===cid
  );
-
-}
-
-
-/* CUSTOMER STATS */
-
-async function customerStats(cid){
-
- const c=
-  await get(CSTORE,cid);
-
- const ps=
-  await paymentsFor(cid);
-
- const collected=
-  ps.reduce(
-   (s,p)=>
-    s+Number(p.amount||0),
-   0
-  );
-
- return{
-
-  collected,
-
-  remaining:
-   Math.max(
-    0,
-    Number(c?.target||0)-collected
-   )
-
- };
 
 }
 
@@ -818,70 +887,50 @@ async function customerStats(cid){
 
 async function dashboard(){
 
- const cs=
-  await all(CSTORE);
-
- const ps=
-  await all(PSTORE);
-
+ const cs=await all(CSTORE);
+ const ps=await all(PSTORE);
 
  const given=
   cs.reduce(
-   (s,c)=>
-    s+Number(c.given||0),
+   (s,c)=>s+Number(c.given||0),
    0
   );
-
 
  const collected=
   ps.reduce(
-   (s,p)=>
-    s+Number(p.amount||0),
+   (s,p)=>s+Number(p.amount||0),
    0
   );
-
 
  const target=
   cs.reduce(
-   (s,c)=>
-    s+Number(c.target||0),
+   (s,c)=>s+Number(c.target||0),
    0
   );
 
-
- const todayCollected=
+ const tc=
   ps
-  .filter(
-   p=>p.date===today
-  )
+  .filter(p=>p.date===today)
   .reduce(
-   (s,p)=>
-    s+Number(p.amount||0),
+   (s,p)=>s+Number(p.amount||0),
    0
   );
-
 
  els.nc.textContent=cs.length;
  els.tg.textContent=money(given);
  els.tc.textContent=money(collected);
+
  els.tr.textContent=
   money(
-   Math.max(
-    0,
-    target-collected
-   )
+   Math.max(0,target-collected)
   );
 
- els.tt.textContent=
-  money(todayCollected);
-
+ els.tt.textContent=money(tc);
 
  els.storage.textContent=
-  'IndexedDB active • '+
+  'Offline database active • '+
   cs.length+
-  ' customer(s) • '+
-  ps.length+
-  ' payment(s)';
+  ' customers';
 
 }
 
@@ -896,25 +945,16 @@ function show(page){
   x=>x.classList.remove('active')
  );
 
-
- const p=$(page);
-
- if(p){
-  p.classList.add('active');
- }
-
+ $(page).classList.add('active');
 
  if(page==='home')
   dashboard();
 
-
  if(page==='customers')
   renderCustomers();
 
-
  if(page==='collect')
   renderCollect();
-
 
  if(page==='history')
   renderHistory();
@@ -926,87 +966,60 @@ function show(page){
 
 async function renderCustomers(){
 
- const cs=
-  await all(CSTORE);
-
+ const cs=await all(CSTORE);
 
  const q=
   els.search.value
   .trim()
   .toLowerCase();
 
-
- const filtered=
+ const list=
   cs.filter(
    c=>
     (
-     c.name+
-     ' '+
+     c.name+' '+
      (c.mobile||'')
     )
     .toLowerCase()
     .includes(q)
   );
 
-
- filtered.sort(
+ list.sort(
   (a,b)=>
    String(a.name)
-   .localeCompare(
-    String(b.name),
-    'en',
-    {sensitivity:'base'}
-   )
+   .localeCompare(String(b.name))
  );
-
 
  els.table.innerHTML='';
 
-
- if(!filtered.length){
+ if(!list.length){
 
   els.table.innerHTML=
    '<tr>'+
    '<td colspan="3" class="empty">'+
    'No customers found.'+
-   '</td>'+
-   '</tr>';
+   '</td></tr>';
 
   return;
 
  }
 
-
- filtered.forEach(
+ list.forEach(
   (c,i)=>{
 
-   const tr=
+   const row=
     document.createElement('tr');
 
+   row.className='customer-row';
 
-   tr.className=
-    'customer-row';
+   row.dataset.id=c.id;
 
+   row.innerHTML=
+    '<td>'+String(i+1).padStart(2,'0')+'</td>'+
+    '<td><b>'+esc(c.name)+'</b></td>'+
+    '<td>'+esc(c.mobile||'-')+'</td>';
 
-   tr.dataset.id=c.id;
-
-
-   tr.innerHTML=
-
-    '<td>'+
-    String(i+1).padStart(2,'0')+
-    '</td>'+
-
-    '<td><b>'+
-    esc(c.name)+
-    '</b></td>'+
-
-    '<td>'+
-    esc(c.mobile||'')+
-    '</td>';
-
-
-   els.table.appendChild(tr);
+   els.table.appendChild(row);
 
   }
  );
@@ -1034,14 +1047,14 @@ async function addCustomer(){
 
 
   if(
-   !n||
-   !Number.isFinite(g)||
-   !Number.isFinite(t)||
+   !n ||
+   !Number.isFinite(g) ||
+   !Number.isFinite(t) ||
    !s
   ){
 
    alert(
-    'Name, Amount Given, Total Amount to Collect aur Start Date bharna zaroori hai.'
+    'Name, Amount Given, Total Amount aur Start Date bharna zaroori hai.'
    );
 
    return;
@@ -1097,7 +1110,6 @@ async function addCustomer(){
 
 
   await dashboard();
-
   await renderCustomers();
 
 
@@ -1120,34 +1132,39 @@ async function addCustomer(){
 }
 
 
-/* OPEN CUSTOMER */
+/* CUSTOMER DETAIL */
 
 async function openCustomer(id){
 
  currentCustomerId=id;
 
-
  const c=
   await get(CSTORE,id);
-
 
  if(!c){
 
   alert('Customer not found.');
-
   return;
 
  }
-
-
- const st=
-  await customerStats(id);
 
  const ps=
   await paymentsFor(id);
 
  const docs=
   await documentsFor(id);
+
+ const collected=
+  ps.reduce(
+   (s,p)=>s+Number(p.amount||0),
+   0
+  );
+
+ const remaining=
+  Math.max(
+   0,
+   Number(c.target||0)-collected
+  );
 
 
  ps.sort(
@@ -1156,123 +1173,211 @@ async function openCustomer(id){
  );
 
 
- show('detail');
-
-
  let h='';
 
 
  h+=
-  '<button class="back" onclick="show(\'customers\')">'+
-  '← Back to Customers'+
-  '</button>';
+ '<button class="secondary" onclick="show(\'customers\')">'+
+ '← Customers'+
+ '</button>';
 
 
  h+=
-  '<h2>'+
-  esc(c.name)+
-  '</h2>';
+ '<h2>'+esc(c.name)+'</h2>';
 
 
  /* DETAILS */
 
  h+=
  '<div class="card">'+
- '<div class="detail-grid">';
 
+ '<div class="detail-grid">'+
 
- h+=
  '<div class="detail-item">'+
- '<span class="small">Mobile</span><br>'+
+ '<div class="small">Mobile</div>'+
  '<b>'+esc(c.mobile||'-')+'</b>'+
- '</div>';
+ '</div>'+
 
-
- h+=
  '<div class="detail-item">'+
- '<span class="small">Start Date</span><br>'+
- '<b>'+esc(c.start||'-')+'</b>'+
- '</div>';
+ '<div class="small">Start Date</div>'+
+ '<b>'+prettyDate(c.start)+'</b>'+
+ '</div>'+
 
-
- h+=
  '<div class="detail-item">'+
- '<span class="small">Amount Given</span><br>'+
+ '<div class="small">Amount Given</div>'+
  '<b>'+money(c.given)+'</b>'+
- '</div>';
+ '</div>'+
 
-
- h+=
  '<div class="detail-item">'+
- '<span class="small">Total Target</span><br>'+
+ '<div class="small">Total Collect</div>'+
  '<b>'+money(c.target)+'</b>'+
- '</div>';
+ '</div>'+
 
-
- h+=
  '<div class="detail-item">'+
- '<span class="small">Collected</span><br>'+
- '<b>'+money(st.collected)+'</b>'+
- '</div>';
+ '<div class="small">Collected</div>'+
+ '<b>'+money(collected)+'</b>'+
+ '</div>'+
 
-
- h+=
  '<div class="detail-item">'+
- '<span class="small">Remaining</span><br>'+
- '<b>'+money(st.remaining)+'</b>'+
- '</div>';
+ '<div class="small">Remaining</div>'+
+ '<b>'+money(remaining)+'</b>'+
+ '</div>'+
 
-
- h+=
- '<div class="detail-item">'+
- '<span class="small">Duration</span><br>'+
- '<b>'+((c.duration||0)+' Days')+'</b>'+
- '</div>';
-
-
- h+=
- '<div class="detail-item">'+
- '<span class="small">Daily Payment</span><br>'+
- '<b>'+money(c.daily||0)+'</b>'+
- '</div>';
-
-
- h+=
  '</div>';
 
 
  if(c.notes){
 
   h+=
-   '<p><b>Notes:</b> '+
+   '<p class="small">'+
+   '<b>Notes:</b> '+
    esc(c.notes)+
    '</p>';
 
  }
 
+ h+='</div>';
+
+
+ /* CALENDAR */
 
  h+=
- '</div>';
+ '<div class="card">'+
+
+ '<h3>📅 Payment Calendar</h3>'+
+
+ '<div class="small">'+
+ '🟢 Paid &nbsp;&nbsp; 🔴 Pending &nbsp;&nbsp; ⚪ Upcoming'+
+ '</div>'+
+
+ '<div class="day-grid">';
+
+
+ const start=
+  new Date(c.start+'T00:00:00');
+
+ const duration=
+  Math.max(
+   0,
+   Number(c.duration||0)
+  );
+
+ const td=
+  new Date(today+'T00:00:00');
+
+
+ for(
+  let i=0;
+  i<duration;
+  i++
+ ){
+
+  const d=
+   new Date(start);
+
+  d.setDate(
+   start.getDate()+i
+  );
+
+  const ds=
+   localDate(d);
+
+  const p=
+   ps.find(
+    x=>x.date===ds
+   );
+
+  const future=
+   d>td;
+
+  let cls='';
+
+  let status='';
+
+  if(future){
+
+   cls='future';
+   status='UPCOMING';
+
+  }else if(p){
+
+   cls='';
+   status='PAID';
+
+  }else{
+
+   cls='pending';
+   status='PENDING';
+
+  }
+
+
+  h+=
+   '<div class="day-box '+cls+
+   '" onclick="openCollectionDay(\''+
+   c.id+
+   '\',\''+
+   ds+
+   '\')">'+
+
+   '<div class="day-no">DAY '+
+   (i+1)+
+   '</div>'+
+
+   '<div class="day-date">'+
+   prettyDate(ds)+
+   '</div>'+
+
+   '<div class="day-status">'+
+   status+
+   '</div>';
+
+
+  if(p){
+
+   h+=
+    '<div class="day-amount">'+
+    money(p.amount)+
+    '</div>';
+
+  }
+
+
+  h+=
+   '</div>';
+
+ }
+
+
+ if(duration===0){
+
+  h+=
+   '<div class="empty" style="grid-column:1/-1">'+
+   'Duration enter nahi hai.'+
+   '</div>';
+
+ }
+
+
+ h+=
+ '</div></div>';
 
 
  /* DOCUMENTS */
 
  h+=
  '<div class="card">'+
- '<h3>📄 Customer Documents</h3>';
 
+ '<h3>📄 Documents</h3>'+
 
- h+=
  '<label>Document</label>'+
- '<input id="docFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt">';
 
+ '<input id="docFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt">'+
 
- h+=
  '<label>Document Name</label>'+
- '<input id="docName" placeholder="Aadhaar / Agreement / PAN etc.">';
 
+ '<input id="docName" placeholder="Aadhaar / Agreement / PAN">'+
 
- h+=
  '<button class="full" onclick="uploadDocument()">'+
  '📤 Upload Document'+
  '</button>';
@@ -1308,9 +1413,9 @@ async function openCustomer(id){
     ){
 
      h+=
-      '<img class="docimg" src="'+
+      '<img class="proof" src="'+
       d.data+
-      '" alt="document">';
+      '">';
 
     }
 
@@ -1339,15 +1444,14 @@ async function openCustomer(id){
 
  }
 
-
- h+=
- '</div>';
+ h+='</div>';
 
 
  /* PAYMENT HISTORY */
 
  h+=
  '<div class="card">'+
+
  '<h3>💰 Payment History</h3>';
 
 
@@ -1355,7 +1459,7 @@ async function openCustomer(id){
 
   h+=
    '<div class="empty">'+
-   'No payments yet.'+
+   'No payment yet.'+
    '</div>';
 
  }else{
@@ -1364,42 +1468,63 @@ async function openCustomer(id){
    p=>{
 
     h+=
-     '<div class="pay-row">'+
+     '<div class="txn">'+
 
-     '<b>'+
-     esc(p.date)+
-     '</b> — '+
-     money(p.amount);
+     '<div class="txn-icon">✓</div>'+
+
+     '<div class="txn-main">'+
+
+     '<div class="txn-title">'+
+     'Payment received'+
+     '</div>'+
+
+     '<div class="txn-date">'+
+     prettyDate(p.date)+
+     '</div>';
 
 
     if(p.note){
 
      h+=
-      '<div class="small">'+
-      'Note: '+
+      '<div class="txn-note">'+
       esc(p.note)+
       '</div>';
 
     }
 
 
+    h+=
+     '</div>'+
+
+     '<div style="text-align:right">'+
+
+     '<div class="txn-amount">+'+
+     money(p.amount)+
+     '</div>';
+
+
     if(p.image){
 
      h+=
-      '<img class="proof" src="'+
-      p.image+
-      '">';
+      '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
+      p.id+
+      '\')">'+
+      '📷 View'+
+      '</button>';
 
     }
 
 
     h+=
      '<br>'+
+
      '<button class="danger" onclick="removePayment(\''+
      p.id+
      '\')">'+
-     'Delete Payment'+
+     'Delete'+
      '</button>'+
+
+     '</div>'+
 
      '</div>';
 
@@ -1409,8 +1534,7 @@ async function openCustomer(id){
  }
 
 
- h+=
- '</div>';
+ h+='</div>';
 
 
  /* DELETE CUSTOMER */
@@ -1432,6 +1556,342 @@ async function openCustomer(id){
 }
 
 
+/* COLLECTION DAY */
+
+async function openCollectionDay(cid,date){
+
+ show('collect');
+
+ els.date.value=date;
+
+ await renderCollect();
+
+ setTimeout(
+  ()=>{
+
+   const box=
+    document.getElementById(
+     'collect-'+cid
+    );
+
+   if(box){
+
+    box.scrollIntoView({
+     behavior:'smooth',
+     block:'center'
+    });
+
+   }
+
+  },
+  150
+ );
+
+}
+
+
+/* COLLECTION */
+
+async function renderCollect(){
+
+ const selected=
+  els.date.value||today;
+
+ const cs=
+  await all(CSTORE);
+
+ els.clist.innerHTML='';
+
+
+ if(!cs.length){
+
+  els.clist.innerHTML=
+   '<div class="card empty">'+
+   'No customers.'+
+   '</div>';
+
+  return;
+
+ }
+
+
+ cs.sort(
+  (a,b)=>
+   String(a.name)
+   .localeCompare(String(b.name))
+ );
+
+
+ for(const c of cs){
+
+  const ps=
+   await paymentsFor(c.id);
+
+  const old=
+   ps.find(
+    p=>p.date===selected
+   );
+
+
+  const box=
+   document.createElement('div');
+
+  box.className='card';
+
+  box.id=
+   'collect-'+c.id;
+
+
+  box.innerHTML=
+
+   '<div style="display:flex;justify-content:space-between;align-items:center;gap:5px">'+
+
+   '<div>'+
+
+   '<b>'+esc(c.name)+'</b>'+
+
+   '<div class="small">'+
+   esc(c.mobile||'')+
+   '</div>'+
+
+   '</div>'+
+
+   '<span class="badge '+
+   (old?'paid':'pending')+
+   '">'+
+   (old?'✅ PAID':'❌ PENDING')+
+   '</span>'+
+
+   '</div>'+
+
+   '<div class="small" style="margin-top:6px">'+
+   'Expected: '+money(c.daily||0)+
+   (old?' • Received: '+money(old.amount):'')+
+   '</div>'+
+
+   '<label>Actual Amount Received</label>'+
+
+   '<input class="amount" type="number" value="'+
+   (old?esc(old.amount):'')+
+   '">'+
+
+   '<label>Payment Screenshot</label>'+
+
+   '<input class="image" type="file" accept="image/*">'+
+
+   '<label>Note</label>'+
+
+   '<input class="note" value="'+
+   (old?esc(old.note||''):'')+
+   '">' +
+
+   '<div class="actions">'+
+
+   '<button onclick="savePayment(\''+
+   c.id+
+   '\')">'+
+   (old?'Update Payment':'Save Payment')+
+   '</button>'+
+
+   (
+    old
+    ?
+    '<button class="danger" onclick="removePayment(\''+
+    old.id+
+    '\')">Delete</button>'
+    :
+    ''
+   )+
+
+   '</div>';
+
+
+  if(old && old.image){
+
+   box.innerHTML+=
+    '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
+    old.id+
+    '\')">📷 View Screenshot</button>';
+
+  }
+
+
+  els.clist.appendChild(box);
+
+ }
+
+}
+
+
+/* SAVE PAYMENT */
+
+async function savePayment(cid){
+
+ try{
+
+  const box=
+   document.getElementById(
+    'collect-'+cid
+   );
+
+  const amount=
+   Number(
+    box.querySelector('.amount').value
+   )||0;
+
+
+  if(amount<=0){
+
+   alert(
+    'Amount enter karo.'
+   );
+
+   return;
+
+  }
+
+
+  const date=
+   els.date.value||today;
+
+
+  const ps=
+   await paymentsFor(cid);
+
+
+  const old=
+   ps.find(
+    p=>p.date===date
+   );
+
+
+  const file=
+   box.querySelector('.image')
+   .files[0];
+
+
+  let image=
+   old?.image||'';
+
+
+  if(file){
+
+   image=
+    await fileDataURL(file);
+
+  }
+
+
+  await put(
+   PSTORE,
+   {
+    id:old?old.id:uid(),
+    cid:cid,
+    date:date,
+    amount:amount,
+    note:
+     box.querySelector('.note').value.trim(),
+    image:image,
+    updatedAt:
+     new Date().toISOString()
+   }
+  );
+
+
+  await dashboard();
+
+  await renderCollect();
+
+
+ }catch(e){
+
+  alert(
+   'Payment save nahi hua: '+
+   e.message
+  );
+
+ }
+
+}
+
+
+/* PAYMENT IMAGE */
+
+async function viewPaymentImage(id){
+
+ const p=
+  await get(PSTORE,id);
+
+ if(!p || !p.image){
+
+  alert(
+   'Screenshot available nahi hai.'
+  );
+
+  return;
+
+ }
+
+
+ const w=window.open();
+
+ if(w){
+
+  w.document.write(
+   '<title>Payment Screenshot</title>'+
+   '<body style="margin:0;background:#111;text-align:center">'+
+   '<img src="'+
+   p.image+
+   '" style="max-width:100%;max-height:100vh">'
+  );
+
+ }else{
+
+  alert(
+   'Screenshot open nahi hua.'
+  );
+
+ }
+
+}
+
+
+/* DELETE PAYMENT */
+
+async function removePayment(id){
+
+ if(
+  !confirm(
+   'Payment delete karna hai?'
+  )
+ )return;
+
+
+ await del(
+  PSTORE,
+  id
+ );
+
+
+ await dashboard();
+
+
+ if(currentCustomerId){
+
+  await openCustomer(
+   currentCustomerId
+  );
+
+ }else{
+
+  await renderCollect();
+  await renderHistory();
+
+ }
+
+}
+
+
 /* DELETE CUSTOMER */
 
 async function deleteCustomer(id){
@@ -1439,19 +1899,15 @@ async function deleteCustomer(id){
  const c=
   await get(CSTORE,id);
 
-
  if(!c)return;
 
 
- const ok=
-  confirm(
-   'Delete '+
-   c.name+
-   ' and ALL its payments and documents?'
-  );
-
-
- if(!ok)return;
+ if(
+  !confirm(
+   'Customer '+c.name+
+   ' aur uske ALL payments/documents delete karne hain?'
+  )
+ )return;
 
 
  const ps=
@@ -1490,7 +1946,6 @@ async function deleteCustomer(id){
 
 
  await dashboard();
-
  await renderCustomers();
 
  show('customers');
@@ -1498,7 +1953,7 @@ async function deleteCustomer(id){
 }
 
 
-/* FILE TO DATA */
+/* FILE DATA */
 
 function fileDataURL(file){
 
@@ -1508,14 +1963,11 @@ function fileDataURL(file){
    const r=
     new FileReader();
 
-
    r.onload=
     ()=>resolve(r.result);
 
-
    r.onerror=
     ()=>reject(r.error);
-
 
    r.readAsDataURL(file);
 
@@ -1525,7 +1977,7 @@ function fileDataURL(file){
 }
 
 
-/* UPLOAD DOCUMENT */
+/* DOCUMENT UPLOAD */
 
 async function uploadDocument(){
 
@@ -1535,7 +1987,9 @@ async function uploadDocument(){
 
 
   const file=
-   $('docFile').files[0];
+   document.getElementById(
+    'docFile'
+   ).files[0];
 
 
   if(!file){
@@ -1550,7 +2004,9 @@ async function uploadDocument(){
 
 
   const name=
-   $('docName').value.trim()||
+   document.getElementById(
+    'docName'
+   ).value.trim()||
    file.name;
 
 
@@ -1574,14 +2030,13 @@ async function uploadDocument(){
 
 
   alert(
-   'Document saved offline.'
+   'Document saved.'
   );
 
 
   await openCustomer(
    currentCustomerId
   );
-
 
  }catch(e){
 
@@ -1595,20 +2050,17 @@ async function uploadDocument(){
 }
 
 
-/* OPEN DOCUMENT */
+/* VIEW DOCUMENT */
 
 async function viewDocument(id){
 
  const d=
   await get(DSTORE,id);
 
-
  if(!d)return;
 
 
- const w=
-  window.open();
-
+ const w=window.open();
 
  if(!w){
 
@@ -1630,9 +2082,11 @@ async function viewDocument(id){
    '<title>'+
    esc(d.name)+
    '</title>'+
+   '<body style="margin:0;text-align:center">'+
    '<img src="'+
    d.data+
-   '" style="max-width:100%">'
+   '" style="max-width:100%">'+
+   '</body>'
   );
 
  }else{
@@ -1650,7 +2104,7 @@ async function deleteDocument(id){
 
  if(
   !confirm(
-   'Delete this document?'
+   'Document delete karna hai?'
   )
  )return;
 
@@ -1664,282 +2118,6 @@ async function deleteDocument(id){
  await openCustomer(
   currentCustomerId
  );
-
-}
-
-
-/* COLLECTION */
-
-async function renderCollect(){
-
- const selected=
-  els.date.value||today;
-
-
- const cs=
-  await all(CSTORE);
-
-
- els.clist.innerHTML='';
-
-
- if(!cs.length){
-
-  els.clist.innerHTML=
-   '<div class="card empty">'+
-   'Add a customer first.'+
-   '</div>';
-
-  return;
-
- }
-
-
- cs.sort(
-  (a,b)=>
-   String(a.name)
-   .localeCompare(String(b.name))
- );
-
-
- for(const c of cs){
-
-  const ps=
-   await paymentsFor(c.id);
-
-
-  const old=
-   ps.find(
-    p=>p.date===selected
-   );
-
-
-  const expected=
-   Number(c.daily||0);
-
-
-  const box=
-   document.createElement('div');
-
-
-  box.className='card';
-
-  box.id=
-   'collect-'+c.id;
-
-
-  box.innerHTML=
-
-   '<div style="display:flex;justify-content:space-between;gap:8px;align-items:center">'+
-
-   '<div>'+
-
-   '<b>'+
-   esc(c.name)+
-   '</b>'+
-
-   '<div class="small">'+
-   esc(c.mobile||'')+
-   '</div>'+
-
-   '</div>'+
-
-   '<span class="badge '+
-   (old?'paid':'pending')+
-   '">'+
-   (old?'✅ PAID':'❌ PENDING')+
-   '</span>'+
-
-   '</div>'+
-
-   '<div class="small" style="margin-top:7px">'+
-
-   'Expected: '+
-   money(expected)+
-
-   (
-    old
-     ?' • Received: '+
-      money(old.amount)
-     :''
-   )+
-
-   '</div>'+
-
-   '<label>Actual Amount Received</label>'+
-
-   '<input class="amount" type="number" min="0" step="0.01" value="'+
-   (old?esc(old.amount):'')+
-   '">' +
-
-   '<label>Payment Screenshot (Optional)</label>'+
-
-   '<input class="image" type="file" accept="image/*">'+
-
-   '<label>Note</label>'+
-
-   '<input class="note" value="'+
-   (old?esc(old.note||''):'')+
-   '">' +
-
-   '<div class="actions">'+
-
-   '<button onclick="savePayment(\''+
-   c.id+
-   '\')">'+
-   (old?'Update Payment':'Save Payment')+
-   '</button>'+
-
-   (
-    old
-     ?'<button class="danger" onclick="removePayment(\''+
-      old.id+
-      '\')">'+
-      'Delete Payment'+
-      '</button>'
-     :''
-   )+
-
-   '</div>'+
-
-   (
-    old&&old.image
-     ?'<img class="proof" src="'+
-      old.image+
-      '">'
-     :''
-   );
-
-
-  els.clist.appendChild(box);
-
- }
-
-}
-
-
-/* SAVE PAYMENT */
-
-async function savePayment(cid){
-
- try{
-
-  const box=
-   $('collect-'+cid);
-
-
-  const amount=
-   Number(
-    box.querySelector('.amount').value
-   )||0;
-
-
-  if(amount<=0){
-
-   alert(
-    'Actual amount enter karo.'
-   );
-
-   return;
-
-  }
-
-
-  const date=
-   els.date.value||today;
-
-
-  const ps=
-   await paymentsFor(cid);
-
-
-  const old=
-   ps.find(
-    p=>p.date===date
-   );
-
-
-  const file=
-   box.querySelector(
-    '.image'
-   ).files[0];
-
-
-  const image=
-   file
-    ?await fileDataURL(file)
-    :(old?.image||'');
-
-
-  await put(
-   PSTORE,
-   {
-    id:old?old.id:uid(),
-    cid:cid,
-    date:date,
-    amount:amount,
-    note:
-     box
-     .querySelector('.note')
-     .value
-     .trim(),
-    image:image,
-    updatedAt:
-     new Date().toISOString()
-   }
-  );
-
-
-  await dashboard();
-
-  await renderCollect();
-
-
- }catch(e){
-
-  alert(
-   'Payment save nahi hua: '+
-   e.message
-  );
-
- }
-
-}
-
-
-/* DELETE PAYMENT */
-
-async function removePayment(id){
-
- if(
-  !confirm(
-   'Delete this payment?'
-  )
- )return;
-
-
- await del(
-  PSTORE,
-  id
- );
-
-
- await dashboard();
-
-
- if(currentCustomerId){
-
-  await openCustomer(
-   currentCustomerId
-  );
-
- }else{
-
-  await renderCollect();
-
-  await renderHistory();
-
- }
 
 }
 
@@ -1961,74 +2139,85 @@ async function renderHistory(){
  );
 
 
- els.history.innerHTML=
-  ps.length
-   ?''
-   :'<div class="card empty">'+
-    'No payments recorded yet.'+
+ els.history.innerHTML='';
+
+
+ if(!ps.length){
+
+  els.history.innerHTML=
+   '<div class="card empty">'+
+   'No payment history.'+
+   '</div>';
+
+  return;
+
+ }
+
+
+ ps.forEach(
+  p=>{
+
+   const c=
+    cs.find(
+     x=>x.id===p.cid
+    );
+
+
+   const div=
+    document.createElement('div');
+
+   div.className='card';
+
+
+   div.innerHTML=
+
+    '<div class="txn">'+
+
+    '<div class="txn-icon">✓</div>'+
+
+    '<div class="txn-main">'+
+
+    '<div class="txn-title">'+
+    esc(c?.name||'Deleted Customer')+
+    '</div>'+
+
+    '<div class="txn-date">'+
+    prettyDate(p.date)+
+    '</div>'+
+
+    '</div>'+
+
+    '<div class="txn-amount">+'+
+    money(p.amount)+
+    '</div>'+
+
     '</div>';
 
 
- for(const p of ps){
+   if(p.image){
 
-  const c=
-   cs.find(
-    x=>x.id===p.cid
-   );
+    div.innerHTML+=
+     '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
+     p.id+
+     '\')">'+
+     '📷 View Screenshot'+
+     '</button>';
 
-
-  const div=
-   document.createElement('div');
-
-
-  div.className='card';
+   }
 
 
-  div.innerHTML=
-
-   '<b>'+
-   esc(
-    c
-     ?c.name
-     :'Deleted Customer'
-   )+
-   '</b>'+
-
-   '<div class="small">'+
-   esc(p.date)+
-   '</div>'+
-
-   '<p>Received: <b>'+
-   money(p.amount)+
-   '</b>'+
-
-   (
-    p.note
-     ?'<br>Note: '+
-      esc(p.note)
-     :''
-   )+
-
-   '</p>'+
-
-   (
-    p.image
-     ?'<img class="proof" src="'+
-      p.image+
-      '">'
-     :''
-   )+
-
-   '<button class="danger" onclick="removePayment(\''+
-   p.id+
-   '\')">'+
-   'Delete Payment'+
-   '</button>';
+   div.innerHTML+=
+    '<button class="danger" onclick="removePayment(\''+
+    p.id+
+    '\')">'+
+    'Delete Payment'+
+    '</button>';
 
 
-  els.history.appendChild(div);
+   els.history.appendChild(div);
 
- }
+  }
+ );
 
 }
 
@@ -2039,41 +2228,31 @@ async function backup(){
 
  try{
 
-  const customers=
-   await all(CSTORE);
+  const data={
 
-  const payments=
-   await all(PSTORE);
-
-  const documents=
-   await all(DSTORE);
-
-
-  const payload={
-
-   format:
-    'Prince Finance Backup',
+   format:'Prince Finance Backup',
 
    version:2,
 
    exportedAt:
     new Date().toISOString(),
 
-   customers:customers,
+   customers:
+    await all(CSTORE),
 
-   payments:payments,
+   payments:
+    await all(PSTORE),
 
-   documents:documents
+   documents:
+    await all(DSTORE)
 
   };
 
 
   const blob=
    new Blob(
-    [JSON.stringify(payload)],
-    {
-     type:'application/json'
-    }
+    [JSON.stringify(data)],
+    {type:'application/json'}
    );
 
 
@@ -2084,9 +2263,7 @@ async function backup(){
   const a=
    document.createElement('a');
 
-
   a.href=url;
-
 
   a.download=
    'Prince-Finance-Backup-'+
@@ -2101,10 +2278,7 @@ async function backup(){
   a.remove();
 
 
-  setTimeout(
-   ()=>URL.revokeObjectURL(url),
-   1000
-  );
+  URL.revokeObjectURL(url);
 
 
  }catch(e){
@@ -2132,13 +2306,13 @@ async function restoreBackup(file){
 
 
   if(
-   !data||
-   !Array.isArray(data.customers)||
+   !data ||
+   !Array.isArray(data.customers) ||
    !Array.isArray(data.payments)
   ){
 
    throw new Error(
-    'Invalid backup format.'
+    'Invalid backup'
    );
 
   }
@@ -2146,16 +2320,12 @@ async function restoreBackup(file){
 
   if(
    !confirm(
-    'Restore backup? Existing local data will be replaced.'
+    'Existing data replace karke backup restore karein?'
    )
-  ){
-
-   return;
-
-  }
+  )return;
 
 
-  const transaction=
+  const tx=
    db.transaction(
     [CSTORE,PSTORE,DSTORE],
     'readwrite'
@@ -2163,19 +2333,17 @@ async function restoreBackup(file){
 
 
   const cs=
-   transaction.objectStore(CSTORE);
+   tx.objectStore(CSTORE);
 
   const ps=
-   transaction.objectStore(PSTORE);
+   tx.objectStore(PSTORE);
 
   const ds=
-   transaction.objectStore(DSTORE);
+   tx.objectStore(DSTORE);
 
 
   cs.clear();
-
   ps.clear();
-
   ds.clear();
 
 
@@ -2199,24 +2367,18 @@ async function restoreBackup(file){
   await new Promise(
    (resolve,reject)=>{
 
-    transaction.oncomplete=
-     resolve;
+    tx.oncomplete=resolve;
 
-    transaction.onerror=
-     ()=>reject(
-      transaction.error
-     );
+    tx.onerror=
+     ()=>reject(tx.error);
 
    }
   );
 
 
   await dashboard();
-
   await renderCustomers();
-
   await renderCollect();
-
   await renderHistory();
 
 
@@ -2237,7 +2399,7 @@ async function restoreBackup(file){
 }
 
 
-/* NAVIGATION */
+/* EVENTS */
 
 document
 .querySelectorAll('nav button')
@@ -2245,14 +2407,10 @@ document
  b=>
  b.addEventListener(
   'click',
-  ()=>show(
-   b.dataset.page
-  )
+  ()=>show(b.dataset.page)
  )
 );
 
-
-/* BUTTONS */
 
 els.addBtn.addEventListener(
  'click',
@@ -2266,17 +2424,12 @@ els.search.addEventListener(
 );
 
 
-/* CUSTOMER CLICK */
-
 els.table.addEventListener(
  'click',
  e=>{
 
   const row=
-   e.target.closest(
-    '[data-id]'
-   );
-
+   e.target.closest('[data-id]');
 
   if(row){
 
@@ -2290,10 +2443,7 @@ els.table.addEventListener(
 );
 
 
-/* DATE */
-
 els.date.value=today;
-
 els.start.value=today;
 
 
@@ -2302,8 +2452,6 @@ els.date.addEventListener(
  renderCollect
 );
 
-
-/* BACKUP */
 
 els.backup.addEventListener(
  'click',
@@ -2321,16 +2469,13 @@ els.restore.addEventListener(
  'change',
  e=>{
 
-  const file=
-   e.target.files[0];
-
+  const file=e.target.files[0];
 
   if(file){
 
    restoreBackup(file);
 
   }
-
 
   e.target.value='';
 
@@ -2341,31 +2486,25 @@ els.restore.addEventListener(
 /* START */
 
 openDB()
-
 .then(
  async()=>{
 
   await dashboard();
-
   await renderCustomers();
-
   await renderCollect();
 
  }
 )
-
 .catch(
  e=>{
 
   console.error(e);
 
   els.storage.textContent=
-   'Database error: '+
-   e.message;
-
+   'Database error: '+e.message;
 
   alert(
-   'Local database start nahi hua: '+
+   'Database start nahi hua: '+
    e.message
   );
 
@@ -2373,16 +2512,18 @@ openDB()
 );
 
 
-/* FUNCTIONS FOR HTML BUTTONS */
+/* GLOBAL FUNCTIONS */
 
 window.show=show;
 window.openCustomer=openCustomer;
+window.deleteCustomer=deleteCustomer;
 window.uploadDocument=uploadDocument;
 window.viewDocument=viewDocument;
 window.deleteDocument=deleteDocument;
-window.deleteCustomer=deleteCustomer;
 window.savePayment=savePayment;
 window.removePayment=removePayment;
+window.viewPaymentImage=viewPaymentImage;
+window.openCollectionDay=openCollectionDay;
 
 </script>
 
