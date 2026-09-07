@@ -1,2531 +1,336 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#173b72">
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#10243f">
 <title>Prince Finance</title>
+<style>
+:root{--navy:#10243f;--blue:#1769aa;--green:#00a86b;--red:#d9363e;--amber:#f4b400;--bg:#f4f6f8;--text:#172033;--muted:#6d7787;--line:#e3e7ed;--card:#fff}
+*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:14px}body{padding-bottom:68px}
+header{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20;padding:13px 15px;box-shadow:0 2px 8px #0003}header b{font-size:20px}header .sub{font-size:11px;opacity:.75;margin-top:2px}
+main{max-width:760px;margin:auto;padding:12px}.page{display:none}.page.active{display:block}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;margin:9px 0;box-shadow:0 2px 8px #0000000a}.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{font-size:20px;font-weight:800;margin-top:4px}.small{font-size:11px;color:var(--muted)}.muted{color:var(--muted);font-size:12px}h2{font-size:20px;margin:7px 0 11px}h3{font-size:16px;margin:5px 0 8px}
+button{border:0;border-radius:9px;background:var(--navy);color:#fff;font-weight:700;padding:10px 12px;font-size:12px;cursor:pointer}button.secondary{background:#e9eef5;color:var(--navy)}button.success{background:var(--green)}button.danger{background:var(--red)}button.link{background:transparent;color:var(--blue);padding:5px}button.full{width:100%}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+label{display:block;font-size:12px;font-weight:700;margin-top:9px}input,textarea,select{width:100%;padding:10px;margin-top:4px;border:1px solid #d4dae2;border-radius:8px;background:#fff;font-size:14px;color:var(--text)}textarea{min-height:70px;resize:vertical}.hidden{display:none!important}.empty{text-align:center;color:var(--muted);padding:25px}.badge{display:inline-block;border-radius:20px;padding:3px 7px;font-size:10px;font-weight:800;background:#eef2f7}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#dfe7f0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#526174;overflow:hidden;flex:none}.avatar img{width:100%;height:100%;object-fit:cover}.row{display:flex;align-items:center;gap:10px}.grow{flex:1;min-width:0}.truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav{position:fixed;left:0;right:0;bottom:0;height:66px;background:#fff;border-top:1px solid var(--line);display:flex;z-index:30;padding-bottom:env(safe-area-inset-bottom)}nav button{flex:1;background:#fff;color:#526174;border-radius:0;margin:0;padding:6px 2px;font-size:10px;line-height:1.2}nav button.active{color:var(--blue);font-weight:800}
+.customer-row{padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer}.customer-row:last-child{border-bottom:0}.customer-row .name{font-weight:800;font-size:14px}.customer-row .meta{font-size:10px;color:var(--muted);margin-top:2px}.customer-row .right{text-align:right;font-size:11px}.search{margin-bottom:8px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}.back{background:transparent;color:var(--navy);padding:6px 0;font-size:13px}.hero{display:flex;align-items:center;gap:11px}.hero .avatar{width:58px;height:58px;font-size:22px}.hero-name{font-size:19px;font-weight:800}.amount-green{color:var(--green);font-weight:800}.amount-red{color:var(--red);font-weight:800}
+.calendar{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.day-box{border:1px solid #dfe4ea;border-radius:9px;background:#fff;padding:8px 5px;text-align:center;min-height:73px;cursor:pointer}.day-box.paid{background:#e8f8f1;border-color:#8bd6b8}.day-box.pending{background:#fff0f0;border-color:#f0a2a6}.day-box.future{background:#eef1f4;color:#8a94a3}.day-num{font-weight:800;font-size:12px}.day-date{font-size:9px;color:var(--muted);margin:3px 0}.day-status{font-size:9px;font-weight:900}.day-amount{font-size:11px;font-weight:800;margin-top:3px}.section-title{font-size:13px;font-weight:800;margin:14px 2px 7px}
+.collect-search{position:sticky;top:0;background:var(--bg);z-index:4;padding-bottom:6px}.collect-card{border-left:4px solid #cfd6df}.collect-card.paid{border-left-color:var(--green)}.collect-card.pending{border-left-color:var(--red)}.status-line{display:flex;justify-content:space-between;gap:8px;align-items:center}.status-paid{color:var(--green);font-weight:900}.status-pending{color:var(--red);font-weight:900}.collect-form{margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.tx-row{display:flex;gap:10px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line);cursor:pointer}.tx-row:last-child{border-bottom:0}.tx-row .tx-amount{margin-left:auto;text-align:right;font-weight:800;font-size:14px}.tx-plus{color:var(--green)}.month-title{font-size:17px;font-weight:800;margin:14px 2px 6px}.detail-box{background:#fff;border-radius:14px;padding:18px;text-align:center;border:1px solid var(--line)}.big-amount{font-size:32px;font-weight:900;color:var(--green);margin:8px 0}.received-pill{display:inline-block;background:#dff7ec;color:#087a50;font-weight:800;padding:5px 13px;border-radius:20px;font-size:12px}.detail-line{padding:10px 0;border-bottom:1px solid var(--line);text-align:left}.detail-line:last-child{border-bottom:0}.detail-label{font-size:10px;color:var(--muted)}.detail-value{font-weight:700;margin-top:2px}.proof-btn{margin-top:8px}.doc-item{border:1px solid var(--line);border-radius:9px;padding:9px;margin-top:7px}.doc-thumb{width:54px;height:54px;object-fit:cover;border-radius:7px;background:#eee}.modal{position:fixed;inset:0;background:#000b;z-index:100;display:flex;align-items:center;justify-content:center;padding:15px}.modal-card{background:#fff;border-radius:12px;max-width:720px;width:100%;max-height:90vh;overflow:auto;padding:10px}.modal img{max-width:100%;max-height:75vh;display:block;margin:auto}.notice{background:#fff7df;border:1px solid #f0d37b;border-radius:10px;padding:9px;font-size:11px}
+@media(max-width:480px){.calendar{grid-template-columns:repeat(3,1fr)}.grid{gap:7px}.card{padding:11px}.hero-name{font-size:17px}}
+</style>
 
 <style>
-*{box-sizing:border-box}
-
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f4f6f9;
- color:#172033;
- font-size:14px
+/* Prince Finance Home polish */
+.app-header{
+  background:linear-gradient(135deg,#0b2447,#173d6b 55%,#0b2447);
+  position:relative;
+  overflow:hidden;
 }
-
-header{
- background:#173b72;
- color:white;
- padding:11px 13px;
- position:sticky;
- top:0;
- z-index:5
+.app-header:after{
+  content:"";
+  position:absolute;
+  width:180px;height:180px;
+  right:-65px;top:-95px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
 }
-
-main{
- max-width:900px;
- margin:auto;
- padding:12px 12px 75px
+.app-header h1{
+  letter-spacing:.2px;
+  text-shadow:0 2px 8px rgba(0,0,0,.22);
 }
-
-.page{display:none}
-.page.active{display:block}
-
-.card{
- background:white;
- padding:13px;
- border-radius:11px;
- margin:9px 0;
- box-shadow:0 2px 7px #0001
+.home-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
-
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px
+.home-title .crown{font-size:22px}
+.total-customers-card{
+  cursor:pointer;
+  transition:transform .12s ease,box-shadow .12s ease;
 }
-
-.stat{
- font-size:18px;
- font-weight:bold;
- margin-top:3px
+.total-customers-card:active{
+  transform:scale(.98);
 }
-
-.small,.muted{
- font-size:11px;
- color:#667
+.total-customers-card .stat-value{
+  text-decoration:underline;
+  text-decoration-style:dotted;
+  text-underline-offset:5px;
 }
-
-label{
- display:block;
- font-size:12px;
- font-weight:bold;
- margin-top:9px
-}
-
-input,textarea{
- width:100%;
- padding:10px;
- margin-top:4px;
- border:1px solid #d7dbe2;
- border-radius:8px;
- background:white;
- font-size:14px
-}
-
-textarea{
- min-height:65px
-}
-
-button{
- border:0;
- border-radius:8px;
- background:#173b72;
- color:white;
- font-weight:bold;
- padding:8px 10px;
- margin-top:6px;
- font-size:12px
-}
-
-button.secondary{
- background:#e8edf5;
- color:#173b72
-}
-
-button.danger{
- background:#c62828
-}
-
-button.success{
- background:#287a3e
-}
-
-button.full{
- width:100%
-}
-
-nav{
- position:fixed;
- bottom:0;
- left:0;
- right:0;
- background:white;
- display:flex;
- border-top:1px solid #ddd;
- z-index:10
-}
-
-nav button{
- flex:1;
- background:white;
- color:#173b72;
- border-radius:0;
- margin:0;
- padding:6px 2px;
- font-size:10px
-}
-
-/* CUSTOMER LIST */
-
-.table{
- width:100%;
- border-collapse:collapse
-}
-
-.table th,
-.table td{
- padding:9px 6px;
- border-bottom:1px solid #eee;
- text-align:left;
- font-size:12px
-}
-
-.table th{
- background:#eef2f8
-}
-
-.customer-row{
- cursor:pointer
-}
-
-.customer-row:active{
- background:#eef2f8
-}
-
-/* STATUS */
-
-.badge{
- display:inline-block;
- padding:4px 7px;
- border-radius:20px;
- font-size:10px;
- font-weight:bold
-}
-
-.paid{
- background:#dff4e5;
- color:#17652d
-}
-
-.pending{
- background:#fde3e3;
- color:#a21d1d
-}
-
-/* PAYMENT HISTORY */
-
-.txn{
- display:flex;
- align-items:center;
- gap:9px;
- padding:10px 0;
- border-bottom:1px solid #eee
-}
-
-.txn-icon{
- width:32px;
- height:32px;
- border-radius:50%;
- background:#e7f5ea;
- color:#287a3e;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:14px;
- flex:none
-}
-
-.txn-main{
- flex:1;
- min-width:0
-}
-
-.txn-title{
- font-weight:bold;
- font-size:12px
-}
-
-.txn-date{
- font-size:10px;
- color:#777;
- margin-top:2px
-}
-
-.txn-amount{
- font-weight:bold;
- color:#287a3e;
- font-size:12px
-}
-
-.txn-note{
- font-size:10px;
- color:#667;
- margin-top:3px
-}
-
-.screenshot-btn{
- background:#eef2f8;
- color:#173b72;
- padding:5px 7px;
- font-size:10px
-}
-
-/* DAY CALENDAR */
-
-.day-grid{
- display:grid;
- grid-template-columns:repeat(5,1fr);
- gap:6px;
- margin-top:10px
-}
-
-.day-box{
- border-radius:8px;
- padding:7px 3px;
- min-height:68px;
- border:1px solid #b9dfc2;
- background:#dff4e5;
- text-align:center;
- cursor:pointer
-}
-
-.day-box.pending{
- background:#fde3e3;
- border-color:#efb3b3
-}
-
-.day-box.future{
- background:#f1f3f6;
- border-color:#ddd;
- color:#777
-}
-
-.day-no{
- font-size:9px;
- font-weight:bold
-}
-
-.day-date{
- font-size:9px;
- margin-top:3px
-}
-
-.day-status{
- font-size:10px;
- font-weight:bold;
- margin-top:4px
-}
-
-.day-amount{
- font-size:11px;
- font-weight:bold;
- margin-top:3px
-}
-
-.empty{
- text-align:center;
- padding:18px;
- color:#667
-}
-
-.actions{
- display:flex;
- gap:5px;
- flex-wrap:wrap
-}
-
-.proof{
- max-width:100%;
- max-height:220px;
- border-radius:8px;
- display:block;
- margin-top:7px
-}
-
-.detail-grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:7px
-}
-
-.detail-item{
- background:#f7f8fa;
- padding:9px;
- border-radius:7px
-}
-
-.doc-row{
- border-top:1px solid #eee;
- padding:9px 0
-}
-
-@media(max-width:520px){
-
- .day-grid{
-  grid-template-columns:repeat(4,1fr)
- }
-
- .day-box{
-  min-height:64px
- }
-
+.total-customers-card:after{
+  content:"Tap to view customers →";
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:#5f6b7a;
 }
 </style>
-</head>
-
+<style id="customer-file-style">
+.folder-bar{display:grid;gap:7px;padding-top:10px}.folder-chip-wrap{display:flex;align-items:center;width:100%;box-sizing:border-box}.folder-chip-wrap .folder-chip{flex:1;text-align:left}
+.folder-chip{border:1px solid #d6dce5;background:#fff;border-radius:18px;padding:8px 12px;font-weight:700;white-space:nowrap}
+.folder-chip.active{background:#173d6b;color:#fff;border-color:#173d6b}
+.folder-actions{display:flex;gap:5px;margin-left:6px}
+.folder-chip-wrap{display:flex;align-items:center}
+.folder-action{border:0;background:transparent;padding:3px;font-size:14px}
+.customer-file-badge{font-size:11px;color:#6b7280;margin-top:2px}
+.move-file-btn{font-size:12px;padding:6px 8px}
+</style><style id="customer-media-style">
+.section-title{font-weight:800;font-size:15px;margin:12px 0 7px}
+.doc-limit{margin:3px 0 7px}
+.customer-media-card{margin-top:12px}
+.document-list{display:grid;gap:8px}
+.document-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid #e0e5ec;border-radius:12px;background:#fff}
+.document-item .grow{min-width:0}
+.document-item .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+</style></head>
 <body>
-
-<header>
-<b style="font-size:20px">🏦 Prince Finance</b>
-<div style="font-size:11px">Offline Collection Manager</div>
-</header>
-
+<header><b>🏦 Prince Finance</b><div class="sub">Offline Collection Manager</div></header>
 <main>
-
-<!-- HOME -->
-
 <section id="home" class="page active">
-
 <h2>Dashboard</h2>
-
 <div class="grid">
-
-<div class="card">
-<div class="small">Total Customers</div>
-<div id="nc" class="stat">0</div>
+<div class="card"><div class="muted">Total Customers</div><div id="nc" class="stat">0</div></div>
+<div class="card"><div class="muted">Amount Given</div><div id="tg" class="stat">₹0</div></div>
+<div class="card"><div class="muted">Amount Collected</div><div id="tc" class="stat">₹0</div></div>
+<div class="card"><div class="muted">Total Remaining</div><div id="tr" class="stat">₹0</div></div>
 </div>
-
-<div class="card">
-<div class="small">Amount Given</div>
-<div id="tg" class="stat">₹0</div>
-</div>
-
-<div class="card">
-<div class="small">Amount Collected</div>
-<div id="tc" class="stat">₹0</div>
-</div>
-
-<div class="card">
-<div class="small">Remaining</div>
-<div id="tr" class="stat">₹0</div>
-</div>
-
-</div>
-
-<div class="card">
-<div class="small">Today's Collection</div>
-<div id="tt" class="stat">₹0</div>
-</div>
-
-<div class="card">
-<div id="storageStatus" class="muted">
-Starting...
-</div>
-</div>
-
+<div class="card"><div class="muted">Today's Collection</div><div id="tt" class="stat">₹0</div></div>
+<div class="card"><b>Local Storage</b><div class="muted" id="storageStatus">Checking…</div></div>
 </section>
-
-
-<!-- CUSTOMERS -->
 
 <section id="customers" class="page">
-
-<h2>Customers</h2>
-
-<div class="card">
-
-<input
- id="customerSearch"
- placeholder="🔎 Search customer">
-
-<div style="overflow:auto">
-
-<table class="table">
-
-<thead>
-<tr>
-<th>No.</th>
-<th>Name</th>
-<th>Mobile</th>
-</tr>
-</thead>
-
-<tbody id="customerTable"></tbody>
-
-</table>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h3>➕ Add Customer</h3>
-
-<label>Name *</label>
-<input id="name">
-
-<label>Mobile Number</label>
-<input id="mobile" type="tel">
-
-<div class="grid">
-
-<div>
-<label>Amount Given *</label>
-<input id="given" type="number">
-</div>
-
-<div>
-<label>Total Amount to Collect *</label>
-<input id="target" type="number">
-</div>
-
-</div>
-
-<div class="grid">
-
-<div>
-<label>Start Date *</label>
-<input id="start" type="date">
-</div>
-
-<div>
-<label>Duration (Days)</label>
-<input id="duration" type="number">
-</div>
-
-</div>
-
-<label>Expected Daily Payment</label>
-<input id="daily" type="number">
-
-<label>Notes</label>
-<textarea id="notes"></textarea>
-
-<button id="addBtn" class="full">
-Add Customer
-</button>
-
-</div>
-
+<div class="topbar"><h2>Customers</h2><button id="newCustomerBtn">＋ Add Customer</button></div>
+<div class="card customer-files"><div class="row"><div class="grow"><b>📁 Customer Files</b><div class="muted">Apne hisaab se files banao aur customers ko alag-alag file me rakho.</div></div><button id="newFolderBtn" class="secondary">＋ File</button></div><div id="folderBar" class="folder-bar"></div></div>
+<div class="card search"><input id="customerSearch" placeholder="Search name, code or mobile…" autocomplete="off"></div>
+<div id="list" class="card" style="padding:5px 10px"></div>
 </section>
 
-
-<!-- CUSTOMER DETAIL -->
-
-<section id="detail" class="page">
-
-<div id="detailContent"></div>
-
+<section id="addCustomer" class="page">
+<div class="topbar"><button class="back" data-back="customers">‹ Customers</button><h2 style="margin:0">Add Customer</h2><span></span></div>
+<div class="card">
+<div class="row"><div id="newAvatar" class="avatar">👤</div><div class="grow"><b>Customer Photo</b><div class="muted">Optional • shown beside the customer name</div></div></div>
+<label>Photo</label><input id="photo" type="file" accept="image/*">
+<label>Name *</label><input id="name" autocomplete="off">
+<label>Mobile Number</label><input id="mobile" type="tel" autocomplete="off">
+<div class="grid"><div><label>Amount Given *</label><input id="given" type="number" min="0" step="0.01"></div><div><label>Total Amount to Collect *</label><input id="target" type="number" min="0" step="0.01"></div></div>
+<div class="grid"><div><label>Start Date *</label><input id="start" type="date"></div><div><label>Duration (Days)</label><input id="duration" type="number" min="0" step="1" placeholder="e.g. 30"></div></div>
+<label>Expected Daily Payment</label><input id="daily" type="number" min="0" step="0.01">
+<label>Notes</label><textarea id="notes"></textarea>
+<button class="full" id="addBtn">Save Customer</button>
+</div>
 </section>
 
-
-<!-- COLLECTION -->
+<section id="customerDetail" class="page">
+<div class="topbar"><button class="back" data-back="customers">‹ Customers</button><div></div><button class="danger" id="deleteCustomerBtn">Delete</button></div>
+<div id="customerDetailBody"></div>
+</section>
 
 <section id="collect" class="page">
-
-<h2>Today's Collection</h2>
-
-<div class="card">
-
-<label>Date</label>
-<input id="date" type="date">
-
-<div class="muted">
-Green = Paid &nbsp; | &nbsp; Red = Pending
-</div>
-
-</div>
-
+<h2>Collection</h2>
+<div class="card" style="margin-top:0"><label>Collection Date</label><input id="collectionDatePicker" type="date" value="" style="width:100%;box-sizing:border-box"><div class="muted" style="margin-top:7px">Date select karte hi us din ke sabhi customers ki PAID / PENDING list khul jayegi. Kisi single line par tap karke detail dekho.</div></div>
+<div class="collect-search"><div class="card" style="margin-top:0"><input id="collectionSearch" placeholder="Search customer code, name or mobile…" autocomplete="off"></div></div>
 <div id="clist"></div>
-
 </section>
-
-
-<!-- HISTORY -->
 
 <section id="history" class="page">
-
-<h2>Payment History</h2>
-
+<h2>History</h2>
 <div id="historyList"></div>
-
 </section>
 
-
-<!-- BACKUP -->
+<section id="transactionDetail" class="page">
+<div class="topbar"><button class="back" data-back="history">‹ History</button><h2 style="margin:0">Payment Details</h2><span></span></div>
+<div id="transactionBody"></div>
+</section>
 
 <section id="reports" class="page">
-
-<h2>Backup & Restore</h2>
-
-<div class="card">
-
-<button id="backupBtn" class="full">
-💾 Export Backup
-</button>
-
-<button id="restoreBtn" class="full secondary">
-♻️ Restore Backup
-</button>
-
-<input
- id="restore"
- type="file"
- accept=".json"
- style="display:none">
-
-</div>
-
+<h2>Backup</h2>
+<div class="card"><div class="muted">Backup contains customers, customer photos, payment history, payment screenshots and customer documents.</div><button class="full" id="backupBtn">Export Backup (JSON)</button><button class="full secondary" id="restoreBtn">Restore Backup (JSON)</button><input id="restore" type="file" accept=".json,application/json" class="hidden"></div>
+<div class="notice">All normal app data works offline. Data is stored on this device in IndexedDB.</div>
 </section>
-
 </main>
-
-
 <nav>
-
-<button data-page="home">
-🏠<br>Home
-</button>
-
-<button data-page="customers">
-👥<br>Customers
-</button>
-
-<button data-page="collect">
-💰<br>Collection
-</button>
-
-<button data-page="history">
-📋<br>History
-</button>
-
-<button data-page="reports">
-💾<br>Backup
-</button>
-
+<button data-page="home">🏠<br>Home</button><button data-page="customers">👥<br>Customers</button><button data-page="collect">💰<br>Collection</button><button data-page="history">📋<br>History</button><button data-page="reports">💾<br>Backup</button>
 </nav>
-
+<div id="imageModal" class="modal hidden"><div class="modal-card"><div style="display:flex;justify-content:flex-end"><button class="secondary" id="closeModal">Close</button></div><img id="modalImage" alt="Payment screenshot"></div></div>
 
 <script>
-
-'use strict';
-
-
-/* DATABASE */
-
-const DB_NAME='PrinceFinanceDB';
-const DB_VERSION=2;
-
-const CSTORE='customers';
-const PSTORE='payments';
-const DSTORE='documents';
-
-let db=null;
-let currentCustomerId=null;
-
+(function(){'use strict';
+const DB_NAME='PrinceFinanceDB',CSTORE='customers',PSTORE='payments',DSTORE='documents';
+let db=null,today=localDate(),currentCustomerId=null,currentTransactionId=null,collectionDate=today;
 const $=id=>document.getElementById(id);
-
-const els={
- nc:$('nc'),
- tg:$('tg'),
- tc:$('tc'),
- tr:$('tr'),
- tt:$('tt'),
- storage:$('storageStatus'),
-
- name:$('name'),
- mobile:$('mobile'),
- given:$('given'),
- target:$('target'),
- start:$('start'),
- duration:$('duration'),
- daily:$('daily'),
- notes:$('notes'),
- addBtn:$('addBtn'),
-
- table:$('customerTable'),
- search:$('customerSearch'),
-
- detail:$('detailContent'),
-
- date:$('date'),
- clist:$('clist'),
-
- history:$('historyList'),
-
- backup:$('backupBtn'),
- restoreBtn:$('restoreBtn'),
- restore:$('restore')
-};
-
-
-function localDate(d=new Date()){
-
- return d.getFullYear()+'-'+
- String(d.getMonth()+1).padStart(2,'0')+'-'+
- String(d.getDate()).padStart(2,'0');
-
+const els={nc:$('nc'),tg:$('tg'),tc:$('tc'),tr:$('tr'),tt:$('tt'),storageStatus:$('storageStatus'),list:$('list'),clist:$('clist'),historyList:$('historyList'),customerDetailBody:$('customerDetailBody'),transactionBody:$('transactionBody')};
+function localDate(d=new Date()){const y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),day=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+day}
+function money(x){return '₹'+(Number(x)||0).toLocaleString('en-IN',{maximumFractionDigits:2})}
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
+function uid(){return (window.crypto&&typeof window.crypto.randomUUID==='function')?window.crypto.randomUUID():Date.now()+'-'+Math.random().toString(16).slice(2)}
+function makeLocalDB(){
+  const prefix='pf_local_';
+  function key(store){return prefix+store}
+  function read(store){try{return JSON.parse(localStorage.getItem(key(store))||'[]')}catch(e){return[]}}
+  function write(store,arr){localStorage.setItem(key(store),JSON.stringify(arr))}
+  function request(fn){const r={result:undefined,error:null,onsuccess:null,onerror:null};setTimeout(()=>{try{r.result=fn();if(r.onsuccess)r.onsuccess({target:r})}catch(e){r.error=e;if(r.onerror)r.onerror({target:r})}},0);return r}
+  const names={contains:n=>[CSTORE,PSTORE,DSTORE].includes(n)};
+  return {local:true,objectStoreNames:names,transaction:(stores,mode)=>({objectStore:store=>({getAll:()=>request(()=>read(store)),get:id=>request(()=>read(store).find(x=>x.id===id)),put:obj=>request(()=>{const a=read(store),i=a.findIndex(x=>x.id===obj.id);if(i>=0)a[i]=obj;else a.push(obj);write(store,a);return obj}),delete:id=>request(()=>{write(store,read(store).filter(x=>x.id!==id));return undefined}),clear:()=>request(()=>{write(store,[]);return undefined})})})};
 }
+function tx(stores,mode='readonly'){return db.transaction(stores,mode)}
+function req(r){return new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function openDB(){return new Promise((resolve,reject)=>{try{
+  if(!window.indexedDB){db=makeLocalDB();return resolve(db)}
+  const r=indexedDB.open(DB_NAME);
+  r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains(CSTORE))d.createObjectStore(CSTORE,{keyPath:'id'});if(!d.objectStoreNames.contains(PSTORE)){const s=d.createObjectStore(PSTORE,{keyPath:'id'});s.createIndex('cid','cid',{unique:false});s.createIndex('date','date',{unique:false})}if(!d.objectStoreNames.contains(DSTORE)){const s=d.createObjectStore(DSTORE,{keyPath:'id'});s.createIndex('cid','cid',{unique:false})}};
+  const fallback=()=>{if(db)return;db=makeLocalDB();resolve(db)};
+  r.onblocked=()=>fallback();
+  r.onerror=()=>fallback();
+  r.onsuccess=()=>{db=r.result;db.onversionchange=()=>{try{db.close()}catch(e){}};resolve(db)}
+ }catch(e){db=makeLocalDB();resolve(db)}})}
+async function all(store){return req(tx([store]).objectStore(store).getAll())}async function get(store,id){return req(tx([store]).objectStore(store).get(id))}async function put(store,obj){return req(tx([store],'readwrite').objectStore(store).put(obj))}async function del(store,id){return req(tx([store],'readwrite').objectStore(store).delete(id))}
+async function paymentsFor(cid){return (await all(PSTORE)).filter(p=>p.cid===cid)}async function docsFor(cid){return (await all(DSTORE)).filter(d=>d.cid===cid)}
+function monthName(dateStr){const d=new Date(dateStr+'T00:00:00');return d.toLocaleDateString('en-IN',{month:'long',year:'numeric'})}
+function formatDate(dateStr){return new Date(dateStr+'T00:00:00').toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
+function formatDateTime(iso,dateStr){if(iso){const d=new Date(iso);if(!isNaN(d))return d.toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})}return formatDate(dateStr)}
+function initials(name){return String(name||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase()||'?'}
+function avatar(c,cls='avatar'){return c&&c.photo?'<div class="'+cls+'"><img src="'+c.photo+'" alt=""></div>':'<div class="'+cls+'">'+esc(initials(c&&c.name))+'</div>'}
+function newCode(){return 'PF'+String(Date.now()).slice(-6)+Math.floor(Math.random()*10)}
+function show(page){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));const p=$(page);if(p)p.classList.add('active');document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));window.scrollTo(0,0);if(page==='home')dashboard();if(page==='customers')renderCustomers();if(page==='collect')renderCollection();if(page==='history')renderHistory();if(page==='customerDetail'&&currentCustomerId)renderCustomerDetail(currentCustomerId);if(page==='transactionDetail'&&currentTransactionId)renderTransactionDetail(currentTransactionId)}
+async function dashboard(){const cs=await all(CSTORE),ps=await all(PSTORE);const given=cs.reduce((s,c)=>s+Number(c.given||0),0),col=ps.reduce((s,p)=>s+Number(p.amount||0),0),target=cs.reduce((s,c)=>s+Number(c.target||0),0),todayCol=ps.filter(p=>p.date===today).reduce((s,p)=>s+Number(p.amount||0),0);els.nc.textContent=cs.length;els.tg.textContent=money(given);els.tc.textContent=money(col);els.tr.textContent=money(Math.max(0,target-col));els.tt.textContent=money(todayCol);els.storageStatus.textContent='IndexedDB active • '+cs.length+' customer(s) • '+ps.length+' payment(s)'}
+async function customerTotals(cid){const ps=await paymentsFor(cid),col=ps.reduce((s,p)=>s+Number(p.amount||0),0),c=await get(CSTORE,cid);return{collected:col,remaining:Math.max(0,Number(c&&c.target||0)-col),payments:ps}}
 
-
-const today=localDate();
-
-
-function money(x){
-
- return '₹'+
- (Number(x)||0).toLocaleString(
-  'en-IN',
-  {maximumFractionDigits:2}
- );
-
-}
-
-
-function prettyDate(s){
-
- if(!s)return '-';
-
- const d=
-  new Date(s+'T00:00:00');
-
- return d.toLocaleDateString(
-  'en-IN',
-  {
-   day:'2-digit',
-   month:'short',
-   year:'numeric'
+let activeFolderId=localStorage.getItem('pf_active_folder')||'all';
+const FOLDER_KEY='prince_finance_customer_folders';
+function localFolders(){try{return JSON.parse(localStorage.getItem(FOLDER_KEY)||'[]')}catch(e){return[]}}
+function saveLocalFolders(fs){localStorage.setItem(FOLDER_KEY,JSON.stringify(fs))}
+function ensureFolders(){let fs=localFolders();if(!fs.length){fs=[{id:'folder-main',name:'All Customers',system:true,createdAt:Date.now()}];saveLocalFolders(fs)}else if(!fs.some(f=>f.id==='folder-main')){fs.unshift({id:'folder-main',name:'All Customers',system:true,createdAt:Date.now()});saveLocalFolders(fs)}return fs}
+function getFolders(){return ensureFolders()}
+async function renderFolders(){
+  const fs=getFolders(),bar=$('folderBar');if(!bar)return;
+  bar.innerHTML='';
+  const allWrap=document.createElement('div');allWrap.className='folder-chip-wrap';
+  const allBtn=document.createElement('button');allBtn.className='folder-chip '+(activeFolderId==='all'?'active':'');allBtn.textContent='📁 All Customers';
+  allBtn.onclick=()=>{activeFolderId='all';localStorage.setItem('pf_active_folder','all');renderFolders();renderCustomers()};allWrap.appendChild(allBtn);bar.appendChild(allWrap);
+  for(const f of fs.filter(x=>x.id!=='folder-main')){
+    const w=document.createElement('div');w.className='folder-chip-wrap';
+    const b=document.createElement('button');b.className='folder-chip '+(activeFolderId===f.id?'active':'');b.textContent='📂 '+f.name;
+    b.onclick=()=>{activeFolderId=f.id;localStorage.setItem('pf_active_folder',f.id);renderFolders();renderCustomers()};w.appendChild(b);
+    const ren=document.createElement('button');ren.className='folder-action';ren.textContent='✏️';ren.onclick=()=>renameFolder(f.id);w.appendChild(ren);
+    const rm=document.createElement('button');rm.className='folder-action';rm.textContent='🗑️';rm.onclick=()=>deleteFolder(f.id);w.appendChild(rm);
+    bar.appendChild(w);
   }
- );
-
 }
-
-
-function esc(x){
-
- return String(x??'')
- .replace(
-  /[&<>"']/g,
-  s=>({
-   '&':'&amp;',
-   '<':'&lt;',
-   '>':'&gt;',
-   '"':'&quot;',
-   "'":'&#39;'
-  }[s])
- );
-
+async function newFolder(){
+  try{
+    const n=prompt('File ka naam likho:');if(!n||!n.trim())return;
+    const name=n.trim(),fs=getFolders();
+    if(fs.some(f=>f.name.toLowerCase()===name.toLowerCase()))return alert('Ye file naam pehle se hai.');
+    const f={id:'folder-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),name,createdAt:Date.now()};
+    fs.push(f);saveLocalFolders(fs);activeFolderId=f.id;localStorage.setItem('pf_active_folder',f.id);
+    await renderFolders();await renderCustomers();alert('File "'+name+'" ban gayi.');
+  }catch(e){alert('File nahi ban paayi: '+(e.message||e))}
 }
-
-
-function uid(){
-
- if(
-  window.crypto &&
-  typeof window.crypto.randomUUID==='function'
- ){
-
-  return window.crypto.randomUUID();
-
- }
-
- return Date.now()+'-'+
- Math.random().toString(16).slice(2);
-
+async function renameFolder(id){
+  const fs=getFolders(),f=fs.find(x=>x.id===id);if(!f)return;
+  const n=prompt('File ka naya naam:',f.name);if(!n||!n.trim())return;
+  const name=n.trim();if(fs.some(x=>x.id!==id&&x.name.toLowerCase()===name.toLowerCase()))return alert('Ye file naam pehle se hai.');
+  f.name=name;saveLocalFolders(fs);renderFolders();
 }
-
-
-/* DATABASE */
-
-function openDB(){
-
- return new Promise(
-  (resolve,reject)=>{
-
-   const r=
-    indexedDB.open(
-     DB_NAME,
-     DB_VERSION
-    );
-
-
-   r.onupgradeneeded=e=>{
-
-    const d=e.target.result;
-
-
-    if(
-     !d.objectStoreNames.contains(CSTORE)
-    ){
-
-     d.createObjectStore(
-      CSTORE,
-      {keyPath:'id'}
-     );
-
-    }
-
-
-    if(
-     !d.objectStoreNames.contains(PSTORE)
-    ){
-
-     const s=
-      d.createObjectStore(
-       PSTORE,
-       {keyPath:'id'}
-      );
-
-     s.createIndex(
-      'cid',
-      'cid',
-      {unique:false}
-     );
-
-     s.createIndex(
-      'date',
-      'date',
-      {unique:false}
-     );
-
-    }
-
-
-    if(
-     !d.objectStoreNames.contains(DSTORE)
-    ){
-
-     const s=
-      d.createObjectStore(
-       DSTORE,
-       {keyPath:'id'}
-      );
-
-     s.createIndex(
-      'cid',
-      'cid',
-      {unique:false}
-     );
-
-    }
-
-   };
-
-
-   r.onsuccess=()=>{
-
-    db=r.result;
-    resolve(db);
-
-   };
-
-
-   r.onerror=()=>reject(r.error);
-
-  }
- );
-
+async function deleteFolder(id){
+  const fs=getFolders(),f=fs.find(x=>x.id===id);if(!f)return;
+  const cs=await all(CSTORE),count=cs.filter(c=>c.folderId===id).length;
+  if(!confirm('"'+f.name+'" file delete karein?\n\n'+count+' customer All Customers me chale jayenge.'))return;
+  for(const c of cs.filter(c=>c.folderId===id)){c.folderId='folder-main';await put(CSTORE,c)}
+  saveLocalFolders(fs.filter(x=>x.id!==id));activeFolderId='all';localStorage.setItem('pf_active_folder','all');await renderFolders();renderCustomers();
 }
-
-
-function request(r){
-
- return new Promise(
-  (resolve,reject)=>{
-
-   r.onsuccess=
-    ()=>resolve(r.result);
-
-   r.onerror=
-    ()=>reject(r.error);
-
-  }
- );
-
+async function moveCustomerToFolder(cid){
+  const c=await get(CSTORE,cid);if(!c)return;
+  const fs=getFolders(),names=fs.map((f,i)=>(i+1)+'. '+f.name).join('\n');
+  const ans=prompt('Customer ko kis file me rakhna hai?\n\n'+names+'\n\nNumber likho:');
+  const i=Number(ans)-1;if(!Number.isInteger(i)||!fs[i])return;
+  c.folderId=fs[i].id;await put(CSTORE,c);renderCustomers();
 }
-
-
-function all(store){
-
- return request(
-  db
-  .transaction(store,'readonly')
-  .objectStore(store)
-  .getAll()
- );
-
-}
-
-
-function get(store,id){
-
- return request(
-  db
-  .transaction(store,'readonly')
-  .objectStore(store)
-  .get(id)
- );
-
-}
-
-
-function put(store,obj){
-
- return request(
-  db
-  .transaction(store,'readwrite')
-  .objectStore(store)
-  .put(obj)
- );
-
-}
-
-
-function del(store,id){
-
- return request(
-  db
-  .transaction(store,'readwrite')
-  .objectStore(store)
-  .delete(id)
- );
-
-}
-
-
-async function paymentsFor(cid){
-
- const p=await all(PSTORE);
-
- return p.filter(
-  x=>x.cid===cid
- );
-
-}
-
-
-async function documentsFor(cid){
-
- const d=await all(DSTORE);
-
- return d.filter(
-  x=>x.cid===cid
- );
-
-}
-
-
-/* DASHBOARD */
-
-async function dashboard(){
-
- const cs=await all(CSTORE);
- const ps=await all(PSTORE);
-
- const given=
-  cs.reduce(
-   (s,c)=>s+Number(c.given||0),
-   0
-  );
-
- const collected=
-  ps.reduce(
-   (s,p)=>s+Number(p.amount||0),
-   0
-  );
-
- const target=
-  cs.reduce(
-   (s,c)=>s+Number(c.target||0),
-   0
-  );
-
- const tc=
-  ps
-  .filter(p=>p.date===today)
-  .reduce(
-   (s,p)=>s+Number(p.amount||0),
-   0
-  );
-
- els.nc.textContent=cs.length;
- els.tg.textContent=money(given);
- els.tc.textContent=money(collected);
-
- els.tr.textContent=
-  money(
-   Math.max(0,target-collected)
-  );
-
- els.tt.textContent=money(tc);
-
- els.storage.textContent=
-  'Offline database active • '+
-  cs.length+
-  ' customers';
-
-}
-
-
-/* PAGE */
-
-function show(page){
-
- document
- .querySelectorAll('.page')
- .forEach(
-  x=>x.classList.remove('active')
- );
-
- $(page).classList.add('active');
-
- if(page==='home')
-  dashboard();
-
- if(page==='customers')
-  renderCustomers();
-
- if(page==='collect')
-  renderCollect();
-
- if(page==='history')
-  renderHistory();
-
-}
-
-
-/* CUSTOMER LIST */
-
-async function renderCustomers(){
-
- const cs=await all(CSTORE);
-
- const q=
-  els.search.value
-  .trim()
-  .toLowerCase();
-
- const list=
-  cs.filter(
-   c=>
-    (
-     c.name+' '+
-     (c.mobile||'')
-    )
-    .toLowerCase()
-    .includes(q)
-  );
-
- list.sort(
-  (a,b)=>
-   String(a.name)
-   .localeCompare(String(b.name))
- );
-
- els.table.innerHTML='';
-
- if(!list.length){
-
-  els.table.innerHTML=
-   '<tr>'+
-   '<td colspan="3" class="empty">'+
-   'No customers found.'+
-   '</td></tr>';
-
-  return;
-
- }
-
- list.forEach(
-  (c,i)=>{
-
-   const row=
-    document.createElement('tr');
-
-   row.className='customer-row';
-
-   row.dataset.id=c.id;
-
-   row.innerHTML=
-    '<td>'+String(i+1).padStart(2,'0')+'</td>'+
-    '<td><b>'+esc(c.name)+'</b></td>'+
-    '<td>'+esc(c.mobile||'-')+'</td>';
-
-   els.table.appendChild(row);
-
-  }
- );
-
-}
-
-
-/* ADD CUSTOMER */
-
+async function renderCustomers(){const q=$('customerSearch').value.trim().toLowerCase(),cs=(await all(CSTORE)).sort((a,b)=>String(a.name).localeCompare(String(b.name)));const filtered=cs.filter(c=>(activeFolderId==='all'||(c.folderId||'folder-main')===activeFolderId)&&(!q||[c.name,c.code,c.mobile].some(v=>String(v||'').toLowerCase().includes(q))));els.list.innerHTML='';if(!filtered.length){els.list.innerHTML='<div class="empty">'+(cs.length?'No matching customer.':'No customers yet. Tap “＋ Add Customer”.')+'</div>';return}for(const c of filtered){const s=await customerTotals(c.id);const div=document.createElement('div');div.className='customer-row row';div.dataset.cid=c.id;div.innerHTML=avatar(c)+'<div class="grow"><div class="name truncate">'+esc(c.name)+'</div><div class="meta">'+esc(c.code||'')+(c.mobile?' • '+esc(c.mobile):'')+'</div></div><button class="secondary move-file-btn" data-move-file="'+esc(c.id)+'">📂</button><div class="right"><div class="amount-green">'+money(s.collected)+'</div><div class="small">Remaining '+money(s.remaining)+'</div></div>';els.list.appendChild(div)}}
 async function addCustomer(){
-
- try{
-
-  const n=
-   els.name.value.trim();
-
-  const g=
-   Number(els.given.value);
-
-  const t=
-   Number(els.target.value);
-
-  const s=
-   els.start.value;
-
-
-  if(
-   !n ||
-   !Number.isFinite(g) ||
-   !Number.isFinite(t) ||
-   !s
-  ){
-
-   alert(
-    'Name, Amount Given, Total Amount aur Start Date bharna zaroori hai.'
-   );
-
-   return;
-
-  }
-
-
-  const c={
-
-   id:uid(),
-
-   name:n,
-
-   mobile:
-    els.mobile.value.trim(),
-
-   given:g,
-
-   target:t,
-
-   start:s,
-
-   duration:
-    Number(els.duration.value)||0,
-
-   daily:
-    Number(els.daily.value)||0,
-
-   notes:
-    els.notes.value.trim(),
-
-   createdAt:
-    new Date().toISOString()
-
-  };
-
-
-  await put(
-   CSTORE,
-   c
-  );
-
-
-  els.name.value='';
-  els.mobile.value='';
-  els.given.value='';
-  els.target.value='';
-  els.duration.value='';
-  els.daily.value='';
-  els.notes.value='';
-
-  els.start.value=today;
-
-
-  await dashboard();
-  await renderCustomers();
-
-
-  alert(
-   'Customer added successfully.'
-  );
-
-
- }catch(e){
-
-  console.error(e);
-
-  alert(
-   'Customer save nahi hua: '+
-   e.message
-  );
-
- }
-
+  try{
+    if(!db)await openDB();
+    const n=$('name').value.trim(),g=Number($('given').value),t=Number($('target').value),s=$('start').value;
+    if(!n||!Number.isFinite(g)||!Number.isFinite(t)||!s)return alert('Name, Amount Given, Total Amount to Collect and Start Date are required.');
+    ensureFolders();
+    let photo='';
+    const file=$('photo').files[0];if(file)photo=await fileDataURL(file);
+    const c={id:uid(),code:newCode(),name:n,mobile:$('mobile').value.trim(),given:g,target:t,start:s,duration:Number($('duration').value)||0,daily:Number($('daily').value)||0,notes:$('notes').value.trim(),photo,folderId:'folder-main',createdAt:new Date().toISOString()};
+    await put(CSTORE,c);
+    ['name','mobile','given','target','duration','daily','notes','photo'].forEach(id=>$(id).value='');
+    $('start').value=today;
+    await chooseFolderForCustomer(c.id);
+    show('customers');
+    await renderFolders();await renderCustomers();await dashboard();
+    alert('Customer added successfully. Code: '+c.code);
+  }catch(err){alert('Customer save nahi ho paaya: '+(err&&err.message?err.message:err))}
+}
+async function chooseFolderForCustomer(cid){
+  const c=await get(CSTORE,cid);if(!c)return;
+  const fs=getFolders();
+  const modal=document.createElement('div');modal.className='modal';modal.id='chooseFolderModal';
+  modal.innerHTML='<div class="modal-card"><h3>📁 Customer ko kis file me rakhein?</h3><div class="muted" style="margin-bottom:10px">Customer add ho gaya hai. Ab file select karein.</div><select id="newCustomerFolderSelect" style="width:100%;box-sizing:border-box">'+fs.map(f=>'<option value="'+esc(f.id)+'">📁 '+esc(f.name)+'</option>').join('')+'</select><button class="full" id="saveCustomerFolder" style="margin-top:10px">Save in Selected File</button><button class="secondary full" id="keepAllCustomers" style="margin-top:7px">Keep in All Customers</button></div>';
+  document.body.appendChild(modal);
+  const close=()=>{if(modal.parentNode)modal.remove()};
+  modal.querySelector('#saveCustomerFolder').onclick=async()=>{const folderId=modal.querySelector('#newCustomerFolderSelect').value||'folder-main';c.folderId=folderId;await put(CSTORE,c);activeFolderId=folderId==='folder-main'?'all':folderId;localStorage.setItem('pf_active_folder',activeFolderId);close();await renderFolders();await renderCustomers()};
+  modal.querySelector('#keepAllCustomers').onclick=async()=>{c.folderId='folder-main';await put(CSTORE,c);activeFolderId='all';localStorage.setItem('pf_active_folder','all');close();await renderFolders();await renderCustomers()};
 }
 
-
-/* CUSTOMER DETAIL */
-
-async function openCustomer(id){
-
- currentCustomerId=id;
-
- const c=
-  await get(CSTORE,id);
-
- if(!c){
-
-  alert('Customer not found.');
-  return;
-
- }
-
- const ps=
-  await paymentsFor(id);
-
- const docs=
-  await documentsFor(id);
-
- const collected=
-  ps.reduce(
-   (s,p)=>s+Number(p.amount||0),
-   0
-  );
-
- const remaining=
-  Math.max(
-   0,
-   Number(c.target||0)-collected
-  );
-
-
- ps.sort(
-  (a,b)=>
-   b.date.localeCompare(a.date)
- );
-
-
- let h='';
-
-
- h+=
- '<button class="secondary" onclick="show(\'customers\')">'+
- '← Customers'+
- '</button>';
-
-
- h+=
- '<h2>'+esc(c.name)+'</h2>';
-
-
- /* DETAILS */
-
- h+=
- '<div class="card">'+
-
- '<div class="detail-grid">'+
-
- '<div class="detail-item">'+
- '<div class="small">Mobile</div>'+
- '<b>'+esc(c.mobile||'-')+'</b>'+
- '</div>'+
-
- '<div class="detail-item">'+
- '<div class="small">Start Date</div>'+
- '<b>'+prettyDate(c.start)+'</b>'+
- '</div>'+
-
- '<div class="detail-item">'+
- '<div class="small">Amount Given</div>'+
- '<b>'+money(c.given)+'</b>'+
- '</div>'+
-
- '<div class="detail-item">'+
- '<div class="small">Total Collect</div>'+
- '<b>'+money(c.target)+'</b>'+
- '</div>'+
-
- '<div class="detail-item">'+
- '<div class="small">Collected</div>'+
- '<b>'+money(collected)+'</b>'+
- '</div>'+
-
- '<div class="detail-item">'+
- '<div class="small">Remaining</div>'+
- '<b>'+money(remaining)+'</b>'+
- '</div>'+
-
- '</div>';
-
-
- if(c.notes){
-
-  h+=
-   '<p class="small">'+
-   '<b>Notes:</b> '+
-   esc(c.notes)+
-   '</p>';
-
- }
-
- h+='</div>';
-
-
- /* CALENDAR */
-
- h+=
- '<div class="card">'+
-
- '<h3>📅 Payment Calendar</h3>'+
-
- '<div class="small">'+
- '🟢 Paid &nbsp;&nbsp; 🔴 Pending &nbsp;&nbsp; ⚪ Upcoming'+
- '</div>'+
-
- '<div class="day-grid">';
-
-
- const start=
-  new Date(c.start+'T00:00:00');
-
- const duration=
-  Math.max(
-   0,
-   Number(c.duration||0)
-  );
-
- const td=
-  new Date(today+'T00:00:00');
-
-
- for(
-  let i=0;
-  i<duration;
-  i++
- ){
-
-  const d=
-   new Date(start);
-
-  d.setDate(
-   start.getDate()+i
-  );
-
-  const ds=
-   localDate(d);
-
-  const p=
-   ps.find(
-    x=>x.date===ds
-   );
-
-  const future=
-   d>td;
-
-  let cls='';
-
-  let status='';
-
-  if(future){
-
-   cls='future';
-   status='UPCOMING';
-
-  }else if(p){
-
-   cls='';
-   status='PAID';
-
-  }else{
-
-   cls='pending';
-   status='PENDING';
-
-  }
-
-
-  h+=
-   '<div class="day-box '+cls+
-   '" onclick="openCollectionDay(\''+
-   c.id+
-   '\',\''+
-   ds+
-   '\')">'+
-
-   '<div class="day-no">DAY '+
-   (i+1)+
-   '</div>'+
-
-   '<div class="day-date">'+
-   prettyDate(ds)+
-   '</div>'+
-
-   '<div class="day-status">'+
-   status+
-   '</div>';
-
-
-  if(p){
-
-   h+=
-    '<div class="day-amount">'+
-    money(p.amount)+
-    '</div>';
-
-  }
-
-
-  h+=
-   '</div>';
-
- }
-
-
- if(duration===0){
-
-  h+=
-   '<div class="empty" style="grid-column:1/-1">'+
-   'Duration enter nahi hai.'+
-   '</div>';
-
- }
-
-
- h+=
- '</div></div>';
-
-
- /* DOCUMENTS */
-
- h+=
- '<div class="card">'+
-
- '<h3>📄 Documents</h3>'+
-
- '<label>Document</label>'+
-
- '<input id="docFile" type="file" accept="image/*,.pdf,.doc,.docx,.txt">'+
-
- '<label>Document Name</label>'+
-
- '<input id="docName" placeholder="Aadhaar / Agreement / PAN">'+
-
- '<button class="full" onclick="uploadDocument()">'+
- '📤 Upload Document'+
- '</button>';
-
-
- if(!docs.length){
-
-  h+=
-   '<div class="empty">'+
-   'No documents uploaded.'+
-   '</div>';
-
- }else{
-
-  docs.forEach(
-   d=>{
-
-    h+=
-     '<div class="doc-row">'+
-
-     '<b>'+
-     esc(d.name)+
-     '</b>'+
-
-     '<div class="small">'+
-     esc(d.fileName||'')+
-     '</div>';
-
-
-    if(
-     d.type &&
-     d.type.startsWith('image/')
-    ){
-
-     h+=
-      '<img class="proof" src="'+
-      d.data+
-      '">';
-
-    }
-
-
-    h+=
-     '<div class="actions">'+
-
-     '<button onclick="viewDocument(\''+
-     d.id+
-     '\')">'+
-     'Open'+
-     '</button>'+
-
-     '<button class="danger" onclick="deleteDocument(\''+
-     d.id+
-     '\')">'+
-     'Delete'+
-     '</button>'+
-
-     '</div>'+
-
-     '</div>';
-
-   }
-  );
-
- }
-
- h+='</div>';
-
-
- /* PAYMENT HISTORY */
-
- h+=
- '<div class="card">'+
-
- '<h3>💰 Payment History</h3>';
-
-
- if(!ps.length){
-
-  h+=
-   '<div class="empty">'+
-   'No payment yet.'+
-   '</div>';
-
- }else{
-
-  ps.forEach(
-   p=>{
-
-    h+=
-     '<div class="txn">'+
-
-     '<div class="txn-icon">✓</div>'+
-
-     '<div class="txn-main">'+
-
-     '<div class="txn-title">'+
-     'Payment received'+
-     '</div>'+
-
-     '<div class="txn-date">'+
-     prettyDate(p.date)+
-     '</div>';
-
-
-    if(p.note){
-
-     h+=
-      '<div class="txn-note">'+
-      esc(p.note)+
-      '</div>';
-
-    }
-
-
-    h+=
-     '</div>'+
-
-     '<div style="text-align:right">'+
-
-     '<div class="txn-amount">+'+
-     money(p.amount)+
-     '</div>';
-
-
-    if(p.image){
-
-     h+=
-      '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
-      p.id+
-      '\')">'+
-      '📷 View'+
-      '</button>';
-
-    }
-
-
-    h+=
-     '<br>'+
-
-     '<button class="danger" onclick="removePayment(\''+
-     p.id+
-     '\')">'+
-     'Delete'+
-     '</button>'+
-
-     '</div>'+
-
-     '</div>';
-
-   }
-  );
-
- }
-
-
- h+='</div>';
-
-
- /* DELETE CUSTOMER */
-
- h+=
- '<div class="card">'+
-
- '<button class="danger full" onclick="deleteCustomer(\''+
- c.id+
- '\')">'+
- '🗑️ Delete Customer'+
- '</button>'+
-
- '</div>';
-
-
- els.detail.innerHTML=h;
-
+async function deleteCustomer(id){const c=await get(CSTORE,id);if(!c)return;const payments=await paymentsFor(id),docs=await docsFor(id);const ok=confirm('⚠️ Delete customer?\n\n'+c.name+' ('+(c.code||'No code')+')\n\nThis will permanently delete this customer, '+payments.length+' payment(s) and '+docs.length+' document(s).\n\nContinue?');if(!ok)return;for(const p of payments)await del(PSTORE,p.id);for(const d of docs)await del(DSTORE,d.id);await del(CSTORE,id);currentCustomerId=null;await dashboard();await renderCustomers();show('customers');alert('Customer deleted successfully.')}
+function openCustomer(id){currentCustomerId=id;show('customerDetail')}
+async function renderCustomerDetail(cid){const c=await get(CSTORE,cid);if(!c){show('customers');return}const {collected,remaining,payments}=await customerTotals(cid),docs=await docsFor(cid);const start=new Date(c.start+'T00:00:00'),duration=Math.max(0,Number(c.duration||0)),td=new Date(today+'T00:00:00');const byDate=new Map(payments.map(p=>[p.date,p]));let calendar='';if(duration){for(let i=0;i<duration;i++){const d=new Date(start);d.setDate(start.getDate()+i);const ds=localDate(d),p=byDate.get(ds),future=d>td;let cls='';if(future)cls='future';else if(p)cls='paid';else cls='pending';calendar+='<div class="day-box '+cls+'" data-day="'+ds+'" data-cid="'+cid+'" data-paid-id="'+(p?p.id:'')+'"><div class="day-num">Day '+(i+1)+'</div><div class="day-date">'+formatDate(ds)+'</div><div class="day-status">'+(future?'UPCOMING':p?'PAID':'PENDING')+'</div>'+(p?'<div class="day-amount">'+money(p.amount)+'</div>':'')+'</div>'}}else calendar='<div class="empty" style="grid-column:1/-1">Duration is not set. Add a duration to create the day-by-day register.</div>';
+let ph=payments.sort((a,b)=>new Date(b.createdAt||b.updatedAt||0)-new Date(a.createdAt||a.updatedAt||0)).slice(0,20).map(p=>'<div class="tx-row" data-tx="'+p.id+'">'+avatar(c)+'<div class="grow"><b>'+esc(c.name)+'</b><div class="small">'+formatDateTime(p.createdAt,p.date)+'</div></div><div class="tx-amount tx-plus">+ '+money(p.amount)+'</div></div>').join('');
+let dh=docs.map(d=>'<div class="doc-item"><div class="row">'+(String(d.type||'').startsWith('image/')?'<img class="doc-thumb" src="'+d.data+'" alt="">':'<div class="doc-thumb" style="display:flex;align-items:center;justify-content:center">📄</div>')+'<div class="grow"><b class="truncate">'+esc(d.name)+'</b><div class="small">'+formatDateTime(d.createdAt)+'</div></div></div><div class="actions"><button data-open-doc="'+d.id+'">Open</button><button class="danger" data-delete-doc="'+d.id+'">Delete</button></div></div>').join('');els.customerDetailBody.innerHTML='<div class="card hero">'+avatar(c,'avatar')+'<div class="grow"><div class="hero-name">'+esc(c.name)+'</div><div class="small">Code: '+esc(c.code)+' '+(c.mobile?'• '+esc(c.mobile):'')+'</div></div></div><div class="grid"><div class="card"><div class="muted">Given</div><div class="stat">'+money(c.given)+'</div></div><div class="card"><div class="muted">Target</div><div class="stat">'+money(c.target)+'</div></div><div class="card"><div class="muted">Collected</div><div class="stat amount-green">'+money(collected)+'</div></div><div class="card"><div class="muted">Remaining</div><div class="stat amount-red">'+money(remaining)+'</div></div></div><div class="card"><div class="muted">Start Date</div><b>'+formatDate(c.start)+'</b><span class="muted"> • Duration '+(duration||'—')+' days</span><div class="muted" style="margin-top:4px">Expected daily: '+(c.daily?money(c.daily):'Not fixed')+'</div>'+(c.notes?'<div class="muted" style="margin-top:6px">Notes: '+esc(c.notes)+'</div>':'')+'</div><div class="section-title">Daily Payment Register</div><div class="card"><div class="calendar">'+calendar+'</div><div class="muted" style="margin-top:8px">Green = paid • Red = pending • Grey = future. Tap a day to collect payment.</div></div><div class="section-title">Customer Documents</div><div class="card"><label>Upload document</label><input id="docFile" type="file"><input id="docName" placeholder="Document name (optional)"><button id="uploadDocBtn">Upload Document</button><div id="docsList">'+(dh||'<div class="empty">No documents added.</div>')+'</div></div><div class="section-title">Payment History</div><div class="card" style="padding:5px 10px">'+(ph||'<div class="empty">No payments yet.</div>')+'</div>';
+els.customerDetailBody.querySelectorAll('[data-tx]').forEach(el=>el.addEventListener('click',()=>{currentTransactionId=el.dataset.tx;show('transactionDetail')}));$('uploadDocBtn').addEventListener('click',()=>uploadDocument(cid));els.customerDetailBody.querySelectorAll('[data-open-doc]').forEach(el=>el.addEventListener('click',()=>openDocument(el.dataset.openDoc)));els.customerDetailBody.querySelectorAll('[data-delete-doc]').forEach(el=>el.addEventListener('click',()=>deleteDocument(el.dataset.deleteDoc)))}
+async function openCollectionDay(cid,date){collectionDate=date;show('collect');$('collectionSearch').value='';await renderCollection(cid);setTimeout(()=>{const box=document.getElementById('collect-'+cid);if(box)box.scrollIntoView({behavior:'smooth',block:'center'})},100)}
+let collectionRenderSeq=0;async function renderCollection(focusCid){const seq=++collectionRenderSeq;const q=$('collectionSearch').value.trim().toLowerCase(),cs=(await all(CSTORE)).sort((a,b)=>String(a.name).localeCompare(String(b.name)));if(seq!==collectionRenderSeq)return;const filtered=focusCid?cs.filter(c=>c.id===focusCid):cs.filter(c=>!q||[c.name,c.code,c.mobile].some(v=>String(v||'').toLowerCase().includes(q)));els.clist.innerHTML='';if(!filtered.length){els.clist.innerHTML='<div class="card empty">Customer nahi mila. Code, naam ya mobile type karo.</div>';return}const rows=[];for(const c of filtered){const ps=await paymentsFor(c.id),old=ps.find(p=>p.date===collectionDate);rows.push({c,old});if(seq!==collectionRenderSeq)return}if(seq!==collectionRenderSeq)return;const frag=document.createDocumentFragment();for(const {c,old} of rows){const d=document.createElement('div');d.className='card collect-card '+(old?'paid':'pending');d.id='collect-'+c.id;d.dataset.cid=c.id;d.innerHTML='<div class="row collection-line" data-collection-row="1">'+avatar(c)+'<div class="grow"><b>'+esc(c.name)+'</b><div class="small">'+esc(c.code||'')+(c.mobile?' • '+esc(c.mobile):'')+'</div></div><div class="status-line">'+(old?'<span class="status-paid">✓ PAID</span>':'<span class="status-pending">✕ PENDING</span>')+'</div></div><div class="collection-detail hidden">'+(old?'<div class="detail-line"><div class="detail-label">PAID DATE & TIME</div><div class="detail-value">'+formatDateTime(old.updatedAt||old.createdAt,old.date)+'</div></div><div class="detail-line"><div class="detail-label">AMOUNT RECEIVED</div><div class="detail-value">'+money(old.amount)+'</div></div>'+(old.note?'<div class="detail-line"><div class="detail-label">NOTE</div><div class="detail-value">'+esc(old.note)+'</div></div>':'')+(old.image?'<button class="secondary full" data-proof="'+old.id+'">📷 View Payment Screenshot</button>':'<div class="muted">No payment screenshot.</div>')+'<button class="full" data-edit-pay="'+old.id+'">✏️ Edit Payment</button><button class="danger full" data-remove-pay="'+old.id+'">🗑️ Delete Payment / Mark Pending</button>':'<div class="collect-form"><label>Actual Amount Received</label><input class="amount" type="number" min="0" step="0.01" value="'+esc(c.daily||'')+'"><label>Payment Screenshot (Optional)</label><input class="image" type="file" accept="image/*"><label>Note</label><input class="note" placeholder="Optional note"><div class="actions"><button class="success" data-pay="'+c.id+'">Save Payment</button></div></div>')+'</div>';frag.appendChild(d)}els.clist.appendChild(frag)}
+async function savePayment(cid){const box=$('collect-'+cid);if(!box)return;const btn=box.querySelector('[data-pay]');if(btn){if(btn.dataset.saving==='1')return;btn.dataset.saving='1';btn.disabled=true;btn.textContent='Saving…'}try{const amount=Number(box.querySelector('.amount').value)||0;if(amount<=0){alert('Enter amount received.');return}const ps=await paymentsFor(cid),matches=ps.filter(p=>p.date===collectionDate).sort((a,b)=>new Date(b.updatedAt||b.createdAt||0)-new Date(a.updatedAt||a.createdAt||0));const old=matches[0]||null;const file=box.querySelector('.image').files[0],img=file?await fileDataURL(file):(old?old.image||'':'');const now=new Date().toISOString();const p={id:old?old.id:uid(),cid,date:collectionDate,amount,note:box.querySelector('.note').value.trim(),image:img,txId:old&&old.txId?old.txId:'PF-TXN-'+Date.now().toString(36).toUpperCase()+'-'+Math.floor(Math.random()*1000),createdAt:old&&old.createdAt?old.createdAt:now,updatedAt:now};await put(PSTORE,p);for(const dup of matches.slice(1))await del(PSTORE,dup.id);await dashboard();await renderCollection(cid);alert(old?'Payment updated. Duplicate records for this date were removed.':'Payment saved. Customer account updated.')}finally{if(btn)btn.disabled=false}}
+async function dedupePayments(){const ps=await all(PSTORE),groups=new Map();for(const p of ps){const key=String(p.cid||'')+'|'+String(p.date||'');if(!groups.has(key))groups.set(key,[]);groups.get(key).push(p)}for(const items of groups.values()){if(items.length<2)continue;items.sort((a,b)=>new Date(b.updatedAt||b.createdAt||0)-new Date(a.updatedAt||a.createdAt||0));const keep=items[0];for(const extra of items.slice(1))await del(PSTORE,extra.id);if(!keep.txId||!keep.updatedAt){keep.txId=keep.txId||'PF-TXN-'+Date.now().toString(36).toUpperCase()+'-'+Math.floor(Math.random()*1000);keep.updatedAt=keep.updatedAt||new Date().toISOString();await put(PSTORE,keep)}}}
+async function renderHistory(){await dedupePayments();const cs=await all(CSTORE),ps=(await all(PSTORE)).sort((a,b)=>new Date(b.createdAt||b.updatedAt||0)-new Date(a.createdAt||a.updatedAt||0));els.historyList.innerHTML='';if(!ps.length){els.historyList.innerHTML='<div class="card empty">No payment history yet.</div>';return}const groups={};for(const p of ps){const key=monthName(p.date);(groups[key]||(groups[key]=[])).push(p)}for(const [month,items] of Object.entries(groups)){const title=document.createElement('div');title.className='month-title';title.textContent=month;els.historyList.appendChild(title);const card=document.createElement('div');card.className='card';card.style.padding='5px 10px';for(const p of items){const c=cs.find(x=>x.id===p.cid)||{name:'Deleted Customer',code:''};const row=document.createElement('div');row.className='tx-row';row.dataset.tx=p.id;row.innerHTML=avatar(c)+'<div class="grow"><div style="font-weight:800" class="truncate">'+esc(c.name)+'</div><div class="small">'+formatDateTime(p.createdAt,p.date)+'</div></div><div class="tx-amount tx-plus">+ '+money(p.amount)+'</div>';card.appendChild(row)}els.historyList.appendChild(card)}}
+async function renderTransactionDetail(id){await dedupePayments();const p=await get(PSTORE,id);if(!p){show('history');return}const c=await get(CSTORE,p.cid)||{name:'Deleted Customer',code:'',mobile:'',photo:''};els.transactionBody.innerHTML='<div class="detail-box"><div class="hero" style="justify-content:center">'+avatar(c)+'<div><div class="small">Payment received from</div><div style="font-weight:800">'+esc(c.name)+'</div></div></div><div class="big-amount">'+money(p.amount)+'</div><div class="received-pill">✓ Received</div><div class="detail-line"><div class="detail-label">DATE & TIME</div><div class="detail-value">'+formatDateTime(p.createdAt,p.date)+'</div></div><div class="detail-line"><div class="detail-label">TRANSACTION ID</div><div class="detail-value">'+esc(p.txId||p.id)+'</div></div><div class="detail-line"><div class="detail-label">CUSTOMER CODE</div><div class="detail-value">'+esc(c.code||'—')+'</div></div><div class="detail-line"><div class="detail-label">PAYMENT DATE</div><div class="detail-value">'+formatDate(p.date)+'</div></div>'+(p.note?'<div class="detail-line"><div class="detail-label">NOTE</div><div class="detail-value">'+esc(p.note)+'</div></div>':'')+(p.image?'<button class="secondary full proof-btn" id="viewPaymentProof">📷 View Payment Screenshot</button>':'')+'<button class="danger full" id="deleteTransactionBtn" style="margin-top:9px">Delete Transaction</button></div>';if(p.image)$('viewPaymentProof').addEventListener('click',()=>viewImage(p.image));$('deleteTransactionBtn').addEventListener('click',()=>removePayment(p.id))}
+async function removePayment(id){const p=await get(PSTORE,id);if(!p)return;const c=await get(CSTORE,p.cid);const label=(c?c.name:'Customer')+' • '+formatDate(p.date)+' • '+money(p.amount);if(!confirm('Delete this payment?\n\n'+label+'\n\nThis will mark this day as PENDING again.'))return;await del(PSTORE,id);currentTransactionId=null;await dashboard();await dedupePayments();show('history')}
+function fileDataURL(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.readAsDataURL(file)})}
+async function uploadDocument(cid){const f=$('docFile').files[0];if(!f)return alert('Select a document first.');const data=await fileDataURL(f),name=$('docName').value.trim()||f.name;await put(DSTORE,{id:uid(),cid,name,fileName:f.name,type:f.type,data,createdAt:new Date().toISOString()});await renderCustomerDetail(cid);alert('Document saved for this customer.')}
+async function openDocument(id){const d=await get(DSTORE,id);if(!d)return;if(String(d.type||'').startsWith('image/')){viewImage(d.data);return}try{const blob=dataURLToBlob(d.data),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=d.fileName||d.name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){alert('Document could not be opened: '+e.message)}}
+async function deleteDocument(id){if(!confirm('Delete this customer document?'))return;const d=await get(DSTORE,id);if(d)await del(DSTORE,id);await renderCustomerDetail(currentCustomerId)}
+function viewImage(src){$('modalImage').src=src;$('imageModal').classList.remove('hidden')}
+function dataURLToBlob(data){const parts=String(data).split(','),mime=(parts[0].match(/:(.*?);/)||[])[1]||'application/octet-stream',bin=atob(parts[1]||''),arr=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)arr[i]=bin.charCodeAt(i);return new Blob([arr],{type:mime})}
+async function findCompletedCustomers(){
+  const cs=await all(CSTORE),now=Date.now(),ready=[];
+  for(const c of cs){
+    const duration=Math.max(0,Number(c.duration||0)); if(!duration) continue;
+    const start=new Date(c.start+'T00:00:00'); if(isNaN(start)) continue;
+    const end=new Date(start); end.setDate(start.getDate()+duration-1);
+    const endDate=localDate(end), ps=await paymentsFor(c.id), byDate=new Map(ps.map(p=>[p.date,p]));
+    let complete=true; for(let i=0;i<duration;i++){const d=new Date(start);d.setDate(start.getDate()+i);if(!byDate.has(localDate(d))){complete=false;break}}
+    if(!complete) continue;
+    let completedAt=c.completedAt||'';
+    if(!completedAt){const last=byDate.get(endDate); completedAt=(last&&(last.updatedAt||last.createdAt))||new Date(end.getTime()+86399999).toISOString(); c.completedAt=completedAt; await put(CSTORE,c)}
+    const eligibleAt=new Date(completedAt).getTime()+72*60*60*1000; if(now>=eligibleAt)ready.push({c,eligibleAt});
+  } return ready;
 }
-
-
-/* COLLECTION DAY */
-
-async function openCollectionDay(cid,date){
-
- show('collect');
-
- els.date.value=date;
-
- await renderCollect();
-
- setTimeout(
-  ()=>{
-
-   const box=
-    document.getElementById(
-     'collect-'+cid
-    );
-
-   if(box){
-
-    box.scrollIntoView({
-     behavior:'smooth',
-     block:'center'
-    });
-
-   }
-
-  },
-  150
- );
-
+async function showDeletionPopup(){
+  const ready=await findCompletedCustomers(); if(!ready.length||$('deleteReadyModal'))return;
+  const modal=document.createElement('div'); modal.className='modal'; modal.id='deleteReadyModal';
+  modal.innerHTML='<div class="modal-card"><h3>🗑️ Customer Delete Ready</h3><div class="muted" style="margin-bottom:10px">Duration aur saare scheduled payments complete hain aur 72 hours complete ho chuke hain. Delete automatic nahi hoga—sirf aapke confirmation par hoga.</div>'+ready.map(x=>'<div class="card"><div class="row">'+avatar(x.c)+'<div class="grow"><b>'+esc(x.c.name)+'</b><div class="small">'+esc(x.c.code||'')+'</div><div class="small">Completed: '+formatDateTime(x.c.completedAt,x.c.start)+'</div></div></div><button class="danger full" data-ready-delete="'+esc(x.c.id)+'" style="margin-top:8px">Delete Customer & Data</button></div>').join('')+'<button class="secondary full" id="closeDeleteReady">Keep Data / Close</button></div>';
+  document.body.appendChild(modal);
+  modal.addEventListener('click',async e=>{if(e.target.id==='closeDeleteReady'||e.target===modal){modal.remove();return}const b=e.target.closest('[data-ready-delete]');if(!b)return;const c=await get(CSTORE,b.dataset.readyDelete);if(!c)return;if(!confirm('Permanently delete '+c.name+' and all payments/documents?'))return;await deleteCustomer(c.id);modal.remove();setTimeout(()=>showDeletionPopup(),100)});
 }
-
-
-/* COLLECTION */
-
-async function renderCollect(){
-
- const selected=
-  els.date.value||today;
-
- const cs=
-  await all(CSTORE);
-
- els.clist.innerHTML='';
-
-
- if(!cs.length){
-
-  els.clist.innerHTML=
-   '<div class="card empty">'+
-   'No customers.'+
-   '</div>';
-
-  return;
-
- }
-
-
- cs.sort(
-  (a,b)=>
-   String(a.name)
-   .localeCompare(String(b.name))
- );
-
-
- for(const c of cs){
-
-  const ps=
-   await paymentsFor(c.id);
-
-  const old=
-   ps.find(
-    p=>p.date===selected
-   );
-
-
-  const box=
-   document.createElement('div');
-
-  box.className='card';
-
-  box.id=
-   'collect-'+c.id;
-
-
-  box.innerHTML=
-
-   '<div style="display:flex;justify-content:space-between;align-items:center;gap:5px">'+
-
-   '<div>'+
-
-   '<b>'+esc(c.name)+'</b>'+
-
-   '<div class="small">'+
-   esc(c.mobile||'')+
-   '</div>'+
-
-   '</div>'+
-
-   '<span class="badge '+
-   (old?'paid':'pending')+
-   '">'+
-   (old?'✅ PAID':'❌ PENDING')+
-   '</span>'+
-
-   '</div>'+
-
-   '<div class="small" style="margin-top:6px">'+
-   'Expected: '+money(c.daily||0)+
-   (old?' • Received: '+money(old.amount):'')+
-   '</div>'+
-
-   '<label>Actual Amount Received</label>'+
-
-   '<input class="amount" type="number" value="'+
-   (old?esc(old.amount):'')+
-   '">'+
-
-   '<label>Payment Screenshot</label>'+
-
-   '<input class="image" type="file" accept="image/*">'+
-
-   '<label>Note</label>'+
-
-   '<input class="note" value="'+
-   (old?esc(old.note||''):'')+
-   '">' +
-
-   '<div class="actions">'+
-
-   '<button onclick="savePayment(\''+
-   c.id+
-   '\')">'+
-   (old?'Update Payment':'Save Payment')+
-   '</button>'+
-
-   (
-    old
-    ?
-    '<button class="danger" onclick="removePayment(\''+
-    old.id+
-    '\')">Delete</button>'
-    :
-    ''
-   )+
-
-   '</div>';
-
-
-  if(old && old.image){
-
-   box.innerHTML+=
-    '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
-    old.id+
-    '\')">📷 View Screenshot</button>';
-
-  }
-
-
-  els.clist.appendChild(box);
-
- }
-
+async function backup(){const payload={format:'Prince Finance Backup',version:2,exportedAt:new Date().toISOString(),customers:await all(CSTORE),payments:await all(PSTORE),documents:await all(DSTORE)};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='Prince-Finance-Backup-'+today+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function restoreBackup(file){const data=JSON.parse(await file.text());if(!data||!Array.isArray(data.customers)||!Array.isArray(data.payments))throw new Error('Invalid backup format.');if(!confirm('Restore this backup? Existing local data will be replaced.'))return;const t=tx([CSTORE,PSTORE,DSTORE],'readwrite'),cs=t.objectStore(CSTORE),ps=t.objectStore(PSTORE),ds=t.objectStore(DSTORE);cs.clear();ps.clear();ds.clear();for(const c of data.customers)cs.put(c);for(const p of data.payments)ps.put(p);for(const d of (Array.isArray(data.documents)?data.documents:[]))ds.put(d);if(Array.isArray(data.folders))saveFolders(data.folders);await new Promise((res,rej)=>{t.oncomplete=res;t.onerror=()=>rej(t.error)});await dashboard();show('customers');alert('Backup restored successfully.')}
+$('newCustomerBtn').addEventListener('click',()=>{show('addCustomer');$('start').value=today});$('addBtn').addEventListener('click',addCustomer);$('customerSearch').addEventListener('input',renderCustomers);$('collectionSearch').addEventListener('input',()=>renderCollection());$('collectionDatePicker').value=collectionDate;$('collectionDatePicker').addEventListener('change',()=>{const d=$('collectionDatePicker').value;if(!d)return;collectionDate=d;renderCollection()});$('backupBtn').addEventListener('click',backup);$('restoreBtn').addEventListener('click',()=>$('restore').click());$('restore').addEventListener('change',async e=>{try{if(e.target.files[0])await restoreBackup(e.target.files[0])}catch(err){alert('Could not restore backup: '+err.message)}e.target.value=''});$('closeModal').addEventListener('click',()=>$('imageModal').classList.add('hidden'));$('imageModal').addEventListener('click',e=>{if(e.target.id==='imageModal')$('imageModal').classList.add('hidden')});$('deleteCustomerBtn').addEventListener('click',()=>deleteCustomer(currentCustomerId));
+$('newFolderBtn').addEventListener('click',newFolder);els.list.addEventListener('click',e=>{const mv=e.target.closest('[data-move-file]');if(mv){e.stopPropagation();moveCustomerToFolder(mv.dataset.moveFile)}});
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));document.querySelectorAll('[data-back]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.back)));
+els.customerDetailBody.addEventListener('click',e=>{const day=e.target.closest('.day-box');if(!day)return;const ds=day.dataset.day,cid=day.dataset.cid;if(day.classList.contains('future'))return;collectionDate=ds;show('collect');$('collectionDatePicker').value=ds;renderCollection(cid)});
+els.list.addEventListener('click',e=>{const row=e.target.closest('[data-cid]');if(row)openCustomer(row.dataset.cid)});els.clist.addEventListener('click',async e=>{const pay=e.target.closest('[data-pay]'),edit=e.target.closest('[data-edit-pay]'),rm=e.target.closest('[data-remove-pay]'),proof=e.target.closest('[data-proof]'),row=e.target.closest('[data-collection-row]');if(pay){e.stopPropagation();savePayment(pay.dataset.pay);return}if(edit){e.stopPropagation();const id=edit.dataset.editPay,p=await get(PSTORE,id);if(!p)return;const card=edit.closest('.collect-card'),detail=card&&card.querySelector('.collection-detail');if(!detail)return;detail.innerHTML='<div class="collect-form"><div class="notice">✏️ Editing payment for '+esc(formatDate(p.date))+'</div><label>Actual Amount Received</label><input class="amount" type="number" min="0" step="0.01" value="'+esc(p.amount)+'"><label>Replace Payment Screenshot (Optional)</label><input class="image" type="file" accept="image/*"><label>Note</label><input class="note" placeholder="Optional note" value="'+esc(p.note||'')+'"><div class="actions"><button class="success" data-pay="'+esc(p.cid)+'">Update Payment</button><button class="secondary" type="button" data-cancel-edit="1">Cancel</button></div></div>';return}if(e.target.closest('[data-cancel-edit]')){e.stopPropagation();renderCollection();return}if(rm){e.stopPropagation();removePayment(rm.dataset.removePay);return}if(proof){e.stopPropagation();get(PSTORE,proof.dataset.proof).then(p=>{if(p&&p.image)viewImage(p.image)});return}if(row){const card=row.closest('.collect-card'),detail=card&&card.querySelector('.collection-detail');if(detail)detail.classList.toggle('hidden')}});els.historyList.addEventListener('click',e=>{const row=e.target.closest('[data-tx]');if(row){currentTransactionId=row.dataset.tx;show('transactionDetail')}});
+$('photo').addEventListener('change',async()=>{const f=$('photo').files[0];if(f){const d=await fileDataURL(f);$('newAvatar').innerHTML='<img src="'+d+'" alt="">'}});
+openDB().then(async()=>{ensureFolders();await dedupePayments();await dashboard();await renderFolders();await renderCustomers();els.storageStatus.textContent=db.local?'Device storage fallback active • Data stays on this phone':'IndexedDB active • '+(await all(CSTORE)).length+' customer(s)';setTimeout(()=>showDeletionPopup().catch(e=>console.error(e)),350)}).catch(err=>{els.storageStatus.textContent='Storage error: '+err.message;alert('Local storage could not be opened: '+err.message)});
+})();
+document.addEventListener('click',e=>{const card=e.target.closest('.total-customers-card');if(card){show('customers');renderCustomers();}});document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('.total-customers-card')){e.preventDefault();show('customers');renderCustomers();}});
+function openAllCustomersFromHome(){
+  show('customers');
+  if(typeof renderCustomers==='function') renderCustomers();
 }
-
-
-/* SAVE PAYMENT */
-
-async function savePayment(cid){
-
- try{
-
-  const box=
-   document.getElementById(
-    'collect-'+cid
-   );
-
-  const amount=
-   Number(
-    box.querySelector('.amount').value
-   )||0;
-
-
-  if(amount<=0){
-
-   alert(
-    'Amount enter karo.'
-   );
-
-   return;
-
-  }
-
-
-  const date=
-   els.date.value||today;
-
-
-  const ps=
-   await paymentsFor(cid);
-
-
-  const old=
-   ps.find(
-    p=>p.date===date
-   );
-
-
-  const file=
-   box.querySelector('.image')
-   .files[0];
-
-
-  let image=
-   old?.image||'';
-
-
-  if(file){
-
-   image=
-    await fileDataURL(file);
-
-  }
-
-
-  await put(
-   PSTORE,
-   {
-    id:old?old.id:uid(),
-    cid:cid,
-    date:date,
-    amount:amount,
-    note:
-     box.querySelector('.note').value.trim(),
-    image:image,
-    updatedAt:
-     new Date().toISOString()
-   }
-  );
-
-
-  await dashboard();
-
-  await renderCollect();
-
-
- }catch(e){
-
-  alert(
-   'Payment save nahi hua: '+
-   e.message
-  );
-
- }
-
-}
-
-
-/* PAYMENT IMAGE */
-
-async function viewPaymentImage(id){
-
- const p=
-  await get(PSTORE,id);
-
- if(!p || !p.image){
-
-  alert(
-   'Screenshot available nahi hai.'
-  );
-
-  return;
-
- }
-
-
- const w=window.open();
-
- if(w){
-
-  w.document.write(
-   '<title>Payment Screenshot</title>'+
-   '<body style="margin:0;background:#111;text-align:center">'+
-   '<img src="'+
-   p.image+
-   '" style="max-width:100%;max-height:100vh">'
-  );
-
- }else{
-
-  alert(
-   'Screenshot open nahi hua.'
-  );
-
- }
-
-}
-
-
-/* DELETE PAYMENT */
-
-async function removePayment(id){
-
- if(
-  !confirm(
-   'Payment delete karna hai?'
-  )
- )return;
-
-
- await del(
-  PSTORE,
-  id
- );
-
-
- await dashboard();
-
-
- if(currentCustomerId){
-
-  await openCustomer(
-   currentCustomerId
-  );
-
- }else{
-
-  await renderCollect();
-  await renderHistory();
-
- }
-
-}
-
-
-/* DELETE CUSTOMER */
-
-async function deleteCustomer(id){
-
- const c=
-  await get(CSTORE,id);
-
- if(!c)return;
-
-
- if(
-  !confirm(
-   'Customer '+c.name+
-   ' aur uske ALL payments/documents delete karne hain?'
-  )
- )return;
-
-
- const ps=
-  await paymentsFor(id);
-
- for(const p of ps){
-
-  await del(
-   PSTORE,
-   p.id
-  );
-
- }
-
-
- const docs=
-  await documentsFor(id);
-
- for(const d of docs){
-
-  await del(
-   DSTORE,
-   d.id
-  );
-
- }
-
-
- await del(
-  CSTORE,
-  id
- );
-
-
- currentCustomerId=null;
-
-
- await dashboard();
- await renderCustomers();
-
- show('customers');
-
-}
-
-
-/* FILE DATA */
-
-function fileDataURL(file){
-
- return new Promise(
-  (resolve,reject)=>{
-
-   const r=
-    new FileReader();
-
-   r.onload=
-    ()=>resolve(r.result);
-
-   r.onerror=
-    ()=>reject(r.error);
-
-   r.readAsDataURL(file);
-
-  }
- );
-
-}
-
-
-/* DOCUMENT UPLOAD */
-
-async function uploadDocument(){
-
- try{
-
-  if(!currentCustomerId)return;
-
-
-  const file=
-   document.getElementById(
-    'docFile'
-   ).files[0];
-
-
-  if(!file){
-
-   alert(
-    'Document select karo.'
-   );
-
-   return;
-
-  }
-
-
-  const name=
-   document.getElementById(
-    'docName'
-   ).value.trim()||
-   file.name;
-
-
-  const data=
-   await fileDataURL(file);
-
-
-  await put(
-   DSTORE,
-   {
-    id:uid(),
-    cid:currentCustomerId,
-    name:name,
-    fileName:file.name,
-    type:file.type,
-    data:data,
-    createdAt:
-     new Date().toISOString()
-   }
-  );
-
-
-  alert(
-   'Document saved.'
-  );
-
-
-  await openCustomer(
-   currentCustomerId
-  );
-
- }catch(e){
-
-  alert(
-   'Document save nahi hua: '+
-   e.message
-  );
-
- }
-
-}
-
-
-/* VIEW DOCUMENT */
-
-async function viewDocument(id){
-
- const d=
-  await get(DSTORE,id);
-
- if(!d)return;
-
-
- const w=window.open();
-
- if(!w){
-
-  alert(
-   'Document open nahi hua.'
-  );
-
-  return;
-
- }
-
-
- if(
-  d.type &&
-  d.type.startsWith('image/')
- ){
-
-  w.document.write(
-   '<title>'+
-   esc(d.name)+
-   '</title>'+
-   '<body style="margin:0;text-align:center">'+
-   '<img src="'+
-   d.data+
-   '" style="max-width:100%">'+
-   '</body>'
-  );
-
- }else{
-
-  w.location.href=d.data;
-
- }
-
-}
-
-
-/* DELETE DOCUMENT */
-
-async function deleteDocument(id){
-
- if(
-  !confirm(
-   'Document delete karna hai?'
-  )
- )return;
-
-
- await del(
-  DSTORE,
-  id
- );
-
-
- await openCustomer(
-  currentCustomerId
- );
-
-}
-
-
-/* HISTORY */
-
-async function renderHistory(){
-
- const cs=
-  await all(CSTORE);
-
- const ps=
-  await all(PSTORE);
-
-
- ps.sort(
-  (a,b)=>
-   b.date.localeCompare(a.date)
- );
-
-
- els.history.innerHTML='';
-
-
- if(!ps.length){
-
-  els.history.innerHTML=
-   '<div class="card empty">'+
-   'No payment history.'+
-   '</div>';
-
-  return;
-
- }
-
-
- ps.forEach(
-  p=>{
-
-   const c=
-    cs.find(
-     x=>x.id===p.cid
-    );
-
-
-   const div=
-    document.createElement('div');
-
-   div.className='card';
-
-
-   div.innerHTML=
-
-    '<div class="txn">'+
-
-    '<div class="txn-icon">✓</div>'+
-
-    '<div class="txn-main">'+
-
-    '<div class="txn-title">'+
-    esc(c?.name||'Deleted Customer')+
-    '</div>'+
-
-    '<div class="txn-date">'+
-    prettyDate(p.date)+
-    '</div>'+
-
-    '</div>'+
-
-    '<div class="txn-amount">+'+
-    money(p.amount)+
-    '</div>'+
-
-    '</div>';
-
-
-   if(p.image){
-
-    div.innerHTML+=
-     '<button class="screenshot-btn" onclick="viewPaymentImage(\''+
-     p.id+
-     '\')">'+
-     '📷 View Screenshot'+
-     '</button>';
-
-   }
-
-
-   div.innerHTML+=
-    '<button class="danger" onclick="removePayment(\''+
-    p.id+
-    '\')">'+
-    'Delete Payment'+
-    '</button>';
-
-
-   els.history.appendChild(div);
-
-  }
- );
-
-}
-
-
-/* BACKUP */
-
-async function backup(){
-
- try{
-
-  const data={
-
-   format:'Prince Finance Backup',
-
-   version:2,
-
-   exportedAt:
-    new Date().toISOString(),
-
-   customers:
-    await all(CSTORE),
-
-   payments:
-    await all(PSTORE),
-
-   documents:
-    await all(DSTORE)
-
-  };
-
-
-  const blob=
-   new Blob(
-    [JSON.stringify(data)],
-    {type:'application/json'}
-   );
-
-
-  const url=
-   URL.createObjectURL(blob);
-
-
-  const a=
-   document.createElement('a');
-
-  a.href=url;
-
-  a.download=
-   'Prince-Finance-Backup-'+
-   today+
-   '.json';
-
-
-  document.body.appendChild(a);
-
-  a.click();
-
-  a.remove();
-
-
-  URL.revokeObjectURL(url);
-
-
- }catch(e){
-
-  alert(
-   'Backup failed: '+
-   e.message
-  );
-
- }
-
-}
-
-
-/* RESTORE */
-
-async function restoreBackup(file){
-
- try{
-
-  const data=
-   JSON.parse(
-    await file.text()
-   );
-
-
-  if(
-   !data ||
-   !Array.isArray(data.customers) ||
-   !Array.isArray(data.payments)
-  ){
-
-   throw new Error(
-    'Invalid backup'
-   );
-
-  }
-
-
-  if(
-   !confirm(
-    'Existing data replace karke backup restore karein?'
-   )
-  )return;
-
-
-  const tx=
-   db.transaction(
-    [CSTORE,PSTORE,DSTORE],
-    'readwrite'
-   );
-
-
-  const cs=
-   tx.objectStore(CSTORE);
-
-  const ps=
-   tx.objectStore(PSTORE);
-
-  const ds=
-   tx.objectStore(DSTORE);
-
-
-  cs.clear();
-  ps.clear();
-  ds.clear();
-
-
-  data.customers.forEach(
-   x=>cs.put(x)
-  );
-
-
-  data.payments.forEach(
-   x=>ps.put(x)
-  );
-
-
-  (
-   data.documents||[]
-  ).forEach(
-   x=>ds.put(x)
-  );
-
-
-  await new Promise(
-   (resolve,reject)=>{
-
-    tx.oncomplete=resolve;
-
-    tx.onerror=
-     ()=>reject(tx.error);
-
-   }
-  );
-
-
-  await dashboard();
-  await renderCustomers();
-  await renderCollect();
-  await renderHistory();
-
-
-  alert(
-   'Backup restored successfully.'
-  );
-
-
- }catch(e){
-
-  alert(
-   'Restore failed: '+
-   e.message
-  );
-
- }
-
-}
-
-
-/* EVENTS */
-
-document
-.querySelectorAll('nav button')
-.forEach(
- b=>
- b.addEventListener(
-  'click',
-  ()=>show(b.dataset.page)
- )
-);
-
-
-els.addBtn.addEventListener(
- 'click',
- addCustomer
-);
-
-
-els.search.addEventListener(
- 'input',
- renderCustomers
-);
-
-
-els.table.addEventListener(
- 'click',
- e=>{
-
-  const row=
-   e.target.closest('[data-id]');
-
-  if(row){
-
-   openCustomer(
-    row.dataset.id
-   );
-
-  }
-
- }
-);
-
-
-els.date.value=today;
-els.start.value=today;
-
-
-els.date.addEventListener(
- 'change',
- renderCollect
-);
-
-
-els.backup.addEventListener(
- 'click',
- backup
-);
-
-
-els.restoreBtn.addEventListener(
- 'click',
- ()=>els.restore.click()
-);
-
-
-els.restore.addEventListener(
- 'change',
- e=>{
-
-  const file=e.target.files[0];
-
-  if(file){
-
-   restoreBackup(file);
-
-  }
-
-  e.target.value='';
-
- }
-);
-
-
-/* START */
-
-openDB()
-.then(
- async()=>{
-
-  await dashboard();
-  await renderCustomers();
-  await renderCollect();
-
- }
-)
-.catch(
- e=>{
-
-  console.error(e);
-
-  els.storage.textContent=
-   'Database error: '+e.message;
-
-  alert(
-   'Database start nahi hua: '+
-   e.message
-  );
-
- }
-);
-
-
-/* GLOBAL FUNCTIONS */
-
-window.show=show;
-window.openCustomer=openCustomer;
-window.deleteCustomer=deleteCustomer;
-window.uploadDocument=uploadDocument;
-window.viewDocument=viewDocument;
-window.deleteDocument=deleteDocument;
-window.savePayment=savePayment;
-window.removePayment=removePayment;
-window.viewPaymentImage=viewPaymentImage;
-window.openCollectionDay=openCollectionDay;
-
 </script>
-
 </body>
 </html>
